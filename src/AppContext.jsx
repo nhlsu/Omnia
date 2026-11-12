@@ -202,7 +202,7 @@ export function submitReport(reportData) {
   }
 
   // STEP 4: only PUBLIC wishlists can be reported
-  if (registry.visibility !== "public") {
+  if (registry.visibility !== VISIBILITY.PUBLIC) {
     throw new Error("Only public wishlists can be reported.");
   }
 
@@ -252,12 +252,18 @@ function createReservationCode() {
 
 
 
+
 // Find a wishlist guests are allowed to open (G1): exists, not private, not hidden, owner not suspended.
 function getOpenRegistry(registryId) {
   const registries = readList(STORAGE_KEYS.registries);
   const registry = registries.find((item) => item.id === registryId);
 
-  if (!registry || registry.visibility === "private" || registry.isHidden) {
+  if (
+  !registry ||
+  registry.visibility === VISIBILITY.PRIVATE ||
+  registry.status === REGISTRY_STATUS.DRAFT ||
+  registry.isHidden
+) {
     throw new Error("This wishlist isn't available.");
   }
 
