@@ -273,6 +273,79 @@ export function cancelReservation(reservationId) {
 
 
 
+// Add a pledge to a group gift (G6, G8). Omnia records pledges only, no payments.
+export function addContribution(contributionData) {
+
+  // STEP 1: name is required
+  const displayName = contributionData?.displayName ? contributionData.displayName.trim() : "";
+
+  if (!displayName) {
+    throw new Error("Please enter your name.");
+  }
+
+  // STEP 2: amount must be a real number above 0
+  const amount = Number(contributionData.amount);
+
+  if (!Number.isFinite(amount) || amount <= 0) {
+    throw new Error("Please enter a valid amount.");
+  }
+
+  // STEP 3: the gift exists, HAS A PRICE, and its wishlist is open
+  const gifts = readList(STORAGE_KEYS.gifts);
+  const gift = gifts.find((item) => item.id === contributionData.giftId);
+
+  if (!gift) {
+    throw new Error("Gift not found.");
+  }
+
+  if (!gift.price) {
+    throw new Error("Group gifts are only for gifts with a price.");
+  }
+
+  getOpenRegistry(gift.registryId);
+
+  // STEP 4: the opposite of reserveGift's STEP 4: no normal reservations allowed
+  const reservations = readList(STORAGE_KEYS.reservations);
+  const isReserved = reservations.some((item) => item.giftId === gift.id);
+
+  if (isReserved) {
+    throw new Error("This gift is already reserved.");
+  }
+
+
+    // STEP 5: how much is still needed?
+  const contributions = readList(STORAGE_KEYS.contributions);
+  const pledged = contributions
+    .filter((item) => item.giftId === gift.id)
+    .reduce((total, item) => total + item.amount, 0);
+  const remaining = Math.round((gift.price - pledged) * 100) / 100;
+  if (remaining <= 0) {
+    throw new Error("This gift is fully funded. Pledges are closed.");
+  }
+
+  // STEP 6: minimum SAR 50, unless less than 50 is left (then the rest is allowed)
+  const minimum = Math.min(50, remaining);
+
+  if (amount < minimum) {
+    throw new Error(`Minimum contribution is SAR ${minimum}.`);
+  }
+
+  if (amount > remaining) {
+    throw new Error(`Maximum is SAR ${remaining}.`);
+  }
+
+  // STEP 7: save the pledge
+  return addRecord(STORAGE_KEYS.contributions, {
+    giftId: gift.id,
+    registryId: gift.registryId,
+    displayName,
+    email: contributionData.email ? contributionData.email.trim().toLowerCase() : "",
+    amount,
+    isAnonymous: contributionData.isAnonymous === true,
+  });
+}
+
+
 
 
 
