@@ -76,7 +76,10 @@ function buildGift(giftData) {
   return {
     registryId: giftData.registryId,
     name: giftData.name?.trim() ?? "",
-    price: Number(giftData.price),
+       price:
+      giftData.price === "" || giftData.price == null
+        ? null
+        : Number(giftData.price),
     quantity: Number(giftData.quantity) || 1,
     notes: giftData.notes?.trim() ?? "",
     imageUrl: giftData.imageUrl ?? null,
@@ -174,6 +177,56 @@ export function updateRegistry(registryId, changes) {
   return updated;
 }         
 
+// Finds a registry and checks the current user owns it. Returns the registry.
+// Used by every gift function, so the owner check is written once.
+function getOwnedRegistry(registryId) {
+  const registry = readList(STORAGE_KEYS.registries).find(
+    (item) => item.id === registryId
+  );
+
+  if (!registry) {
+    throw new Error("Registry not found.");
+  }
+
+  if (registry.ownerId !== getCurrentUserId()) {
+    throw new Error("Only the owner can modify this registry.");
+  }
+
+  return registry;
+}
+
+// Shared checks for gift fields. `data` has already been through buildGift,
+// so price and quantity are numbers or null here.
+function validateGiftFields(data) {
+  if (!data.name?.trim()) {
+    throw new Error("Gift name is required.");
+  }
+
+  if (
+    data.price !== null &&
+    (!Number.isFinite(data.price) || data.price <= 0)
+  ) {
+    throw new Error("Price must be a valid amount.");
+  }
+
+  if (data.isGroupGift && data.price === null) {
+    throw new Error("Group gifts need a price.");
+  }
+
+  if (!Number.isInteger(data.quantity) || data.quantity < 1) {
+    throw new Error("Quantity must be a whole number of at least 1.");
+  }
+}
+// Add a gift ([W7] "Save gift").
+export function addGift(giftData) {
+  getOwnedRegistry(giftData.registryId);
+
+  const gift = buildGift(giftData);
+
+  validateGiftFields(gift);
+
+  return addRecord(STORAGE_KEYS.gifts, gift);
+}
 //Guest Functions
 
 // Report a public wishlist or one of its gifts (W19). Saved as "open" for the admin.
