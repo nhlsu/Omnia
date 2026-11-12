@@ -54,6 +54,7 @@ function addRecord(key, data) {
 
 
 //Guest Functions
+
 // Report a public wishlist or one of its gifts (W19). Saved as "open" for the admin.
 export function submitReport(reportData) {
 
@@ -106,6 +107,122 @@ export function submitReport(reportData) {
     status: "open",
   });
 }
+
+
+
+
+// Make a random 6-character code (like "K7Q2MZ") that no other reservation uses.
+function createReservationCode() {
+  const characters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const reservations = readList(STORAGE_KEYS.reservations);
+  let code;
+
+  do {
+    code = "";
+    for (let i = 0; i < 6; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      code += characters[randomIndex];
+    }
+  } while (reservations.some((item) => item.code === code));
+
+  return code;
+}
+
+
+
+
+// Find a wishlist guests are allowed to open (G1): exists, not private, not hidden, owner not suspended.
+function getOpenRegistry(registryId) {
+  const registries = readList(STORAGE_KEYS.registries);
+  const registry = registries.find((item) => item.id === registryId);
+
+  if (!registry || registry.visibility === "private" || registry.isHidden) {
+    throw new Error("This wishlist isn't available.");
+  }
+
+  const users = readList(STORAGE_KEYS.users);
+  const owner = users.find((user) => user.id === registry.ownerId);
+
+  if (owner && owner.status === "suspended") {
+    throw new Error("This wishlist isn't available.");
+  }
+
+  return registry;
+}
+
+
+
+
+
+// Reserve an available gift (G4). Rechecks availability right before saving.
+export function reserveGift(reservationData) {
+
+  // STEP 1: name and email are required
+  const displayName = reservationData?.displayName ? reservationData.displayName.trim() : "";
+  const email = reservationData?.email ? reservationData.email.trim().toLowerCase() : "";
+
+  if (!displayName) {
+    throw new Error("Please enter your name.");
+  }
+
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailPattern.test(email)) {
+    throw new Error("Please enter a valid email address.");
+  }
+
+  // STEP 2: units must be a whole number, at least 1 (default 1)
+  const units = reservationData.units === undefined ? 1 : Number(reservationData.units);
+  if (!Number.isInteger(units) || units < 1) {
+    throw new Error("Please choose at least 1 unit.");
+  }
+
+  // STEP 3: the gift exists and its wishlist is open to guests
+  const gifts = readList(STORAGE_KEYS.gifts);
+  const gift = gifts.find((item) => item.id === reservationData.giftId);
+
+  if (!gift) {
+    throw new Error("Gift not found.");
+  }
+
+  getOpenRegistry(gift.registryId);
+
+  // STEP 4: a gift is EITHER reserved OR a group gift, never both
+  const contributions = readList(STORAGE_KEYS.contributions);
+  const hasGroupGift = contributions.some((item) => item.giftId === gift.id);
+
+  if (hasGroupGift) {
+    throw new Error("This gift is a group gift. Join the group gift instead.");
+  }
+
+  // STEP 5: RECHECK availability at the moment of saving (the most important part)
+  const reservations = readList(STORAGE_KEYS.reservations);
+  const giftReservations = reservations.filter((item) => item.giftId === gift.id);
+  const reservedUnits = giftReservations.reduce((total, item) => total + item.units, 0);
+  const quantity = gift.quantity || 1;
+  const availableUnits = quantity - reservedUnits;
+
+  if (availableUnits <= 0) {
+    throw new Error("Someone just reserved this gift.");
+  }
+
+  if (units > availableUnits) {
+    throw new Error(`Only ${availableUnits} left to reserve.`);
+  }
+
+  // STEP 6: save the reservation with a unique code
+  return addRecord(STORAGE_KEYS.reservations, {
+    giftId: gift.id,
+    registryId: gift.registryId,
+    displayName,
+    email,
+    units,
+    isAnonymous: reservationData.isAnonymous === true,
+    code: createReservationCode(),
+  });
+}
+
+
+
 
 
 
