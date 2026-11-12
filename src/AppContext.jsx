@@ -54,6 +54,58 @@ function addRecord(key, data) {
 
 
 //Guest Functions
+// Report a public wishlist or one of its gifts (W19). Saved as "open" for the admin.
+export function submitReport(reportData) {
+
+  // STEP 1: a reason must be chosen, and it must be one of the allowed ones
+  const allowedReasons = ["inappropriate", "spam", "other"];
+
+  if (!reportData || !allowedReasons.includes(reportData.reason)) {
+    throw new Error("Please select a reason.");
+  }
+
+  // STEP 2: details are optional, but at most 300 characters
+  const details = reportData.details ? reportData.details.trim() : "";
+
+  if (details.length > 300) {
+    throw new Error("Details must be 300 characters or fewer.");
+  }
+
+  // STEP 3: find the registry being reported
+  const registries = readList(STORAGE_KEYS.registries);
+  const registry = registries.find((item) => item.id === reportData.registryId);
+
+  if (!registry) {
+    throw new Error("Wishlist not found.");
+  }
+
+  // STEP 4: only PUBLIC wishlists can be reported
+  if (registry.visibility !== "public") {
+    throw new Error("Only public wishlists can be reported.");
+  }
+
+  // STEP 5: if one gift is reported, it must belong to this registry
+  if (reportData.giftId) {
+    const gifts = readList(STORAGE_KEYS.gifts);
+    const gift = gifts.find(
+      (item) => item.id === reportData.giftId && item.registryId === registry.id
+    );
+
+    if (!gift) {
+      throw new Error("Gift not found in this wishlist.");
+    }
+  }
+
+  // STEP 6: save the report and return it
+  return addRecord(STORAGE_KEYS.reports, {
+    registryId: registry.id,
+    giftId: reportData.giftId || null,
+    type: reportData.giftId ? "gift" : "registry",
+    reason: reportData.reason,
+    details: details,
+    status: "open",
+  });
+}
 
 
 
