@@ -475,6 +475,40 @@ export function addContribution(contributionData) {
 
 
 
+// Post a note in a group gift thread (G7). Only guests who pledged to THIS gift can post.
+export function addNote(noteData) {
+
+  // STEP 1: the note can't be empty and is at most 300 characters
+  const text = noteData?.text ? noteData.text.trim() : "";
+
+  if (!text) {
+    throw new Error("Please write a note.");
+  }
+
+  if (text.length > 300) {
+    throw new Error("Notes must be 300 characters or fewer.");
+  }
+
+  // STEP 2: the writer must have pledged to THIS gift (their contributionId is the "ticket")
+  const contributions = readList(STORAGE_KEYS.contributions);
+  const contribution = contributions.find(
+    (item) => item.id === noteData.contributionId && item.giftId === noteData.giftId
+  );
+
+  if (!contribution) {
+    throw new Error("Only contributors to this gift can post notes.");
+  }
+
+  // STEP 3: save the note. The author's name comes from their pledge, not from the page
+  return addRecord(STORAGE_KEYS.notes, {
+    giftId: contribution.giftId,
+    contributionId: contribution.id,
+    authorName: contribution.displayName,
+    text,
+  });
+}
+
+
 
 
 //Admin Functions
