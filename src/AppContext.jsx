@@ -511,6 +511,59 @@ export function addNote(noteData) {
 
 
 
+
+
+export const GIFT_STATUS = {
+  AVAILABLE: "available",
+  PARTLY_RESERVED: "partlyReserved",
+  RESERVED: "reserved",
+  GROUP_IN_PROGRESS: "groupInProgress",
+  FULLY_FUNDED: "fullyFunded",
+};
+
+// Work out a gift's status from its reservations and pledges (G3). Nothing is stored.
+export function getGiftStatus(giftId) {
+  const gift = readList(STORAGE_KEYS.gifts).find((item) => item.id === giftId);
+
+  if (!gift) {
+    throw new Error("Gift not found.");
+  }
+
+  // STEP 1: count reserved units and pledged money for THIS gift
+  const quantity = gift.quantity || 1;
+
+  const reservedUnits = readList(STORAGE_KEYS.reservations)
+    .filter((item) => item.giftId === giftId)
+    .reduce((total, item) => total + item.units, 0);
+
+  const pledged = readList(STORAGE_KEYS.contributions)
+    .filter((item) => item.giftId === giftId)
+    .reduce((total, item) => total + item.amount, 0);
+
+  // STEP 2: decide the status (group gift first, then reservations)
+  let status;
+
+  if (pledged > 0) {
+    status = pledged >= gift.price ? GIFT_STATUS.FULLY_FUNDED : GIFT_STATUS.GROUP_IN_PROGRESS;
+  } else if (reservedUnits >= quantity) {
+    status = GIFT_STATUS.RESERVED;
+  } else if (reservedUnits > 0) {
+    status = GIFT_STATUS.PARTLY_RESERVED;
+  } else {
+    status = GIFT_STATUS.AVAILABLE;
+  }
+
+  // STEP 3: return the status AND the numbers the screens need (e.g. "1 of 3 reserved", progress bar)
+  return {
+    status,
+    quantity,
+    reservedUnits,
+    pledged,
+    remaining: Math.round(((gift.price || 0) - pledged) * 100) / 100,
+  };
+}
+
+
 //Admin Functions
 
 
