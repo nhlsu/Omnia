@@ -564,6 +564,31 @@ export function getGiftStatus(giftId) {
 }
 
 
+// Everything W12 needs: the wishlist, its occasion name, and its gifts with their status (G1, G3).
+export function getGuestWishlist(registryId) {
+
+  // STEP 1: the wishlist must be open to guests (throws -> the page shows W12b)
+  const registry = getOpenRegistry(registryId);
+
+  // STEP 2: find the occasion name (the registry only stores its id)
+  const occasion = readList(STORAGE_KEYS.occasionTypes).find(
+    (item) => item.id === registry.occasionTypeId
+  );
+
+  // STEP 3: this wishlist's gifts, each one with its status added
+  const gifts = readList(STORAGE_KEYS.gifts)
+    .filter((gift) => gift.registryId === registry.id)
+    .map((gift) => ({ ...gift, ...getGiftStatus(gift.id) }));
+
+  return {
+    registry,
+    occasionName: occasion ? occasion.name : "",
+    gifts,
+  };
+}
+
+
+
 //Admin Functions
 
 
