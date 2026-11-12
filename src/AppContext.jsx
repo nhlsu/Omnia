@@ -46,12 +46,133 @@ function addRecord(key, data) {
 
 
 //Registry Owner Functions
+export const VISIBILITY = {
+  PUBLIC: "public",
+  LINK_ONLY: "linkOnly",
+  PRIVATE: "private",
+};
 
+export const REGISTRY_STATUS = {
+  DRAFT: "draft",
+  PUBLISHED: "published",
+};
 
+export const NOTE_MAX_LENGTH = 200;
 
+function buildRegistry(registryData) {
+  return {
+    ownerId: getCurrentUserId(),
+    name: registryData.name?.trim() ?? "",
+    occasionTypeId: registryData.occasionTypeId ?? null,
+    date: registryData.date || null,
+    note: registryData.note ? registryData.note.trim() : "",
+    visibility: VISIBILITY.LINK_ONLY,
+    status: REGISTRY_STATUS.DRAFT,
+    isHidden: false,
+  };
+}
 
+function buildGift(giftData) {
+  return {
+    registryId: giftData.registryId,
+    name: giftData.name?.trim() ?? "",
+    price: Number(giftData.price),
+    quantity: Number(giftData.quantity) || 1,
+    notes: giftData.notes?.trim() ?? "",
+    imageUrl: giftData.imageUrl ?? null,
+    productUrl: giftData.productUrl ?? null,
+    storeName: giftData.storeName ?? null,
+    isGroupGift: giftData.isGroupGift === true,
+  };
+}
 
+// TEMPORARY: remove once a teammate adds the real current-user function in //Account Functions
+function getCurrentUserId() {
+  return "demo-owner";
+}
 
+// Shared checks for registry fields.
+function validateRegistryFields(data, isDraft = false) {
+  if (!data.name?.trim()) {
+    throw new Error("Registry name is required.");
+  }
+
+  if (!isDraft && !data.occasionTypeId) {
+    throw new Error("Occasion type is required.");
+  }
+
+  if (data.note && data.note.trim().length > NOTE_MAX_LENGTH) {
+    throw new Error(`Note cannot exceed ${NOTE_MAX_LENGTH} characters.`);
+  }
+
+  if (
+    data.visibility &&
+    !Object.values(VISIBILITY).includes(data.visibility)
+  ) {
+    throw new Error("Invalid registry visibility.");
+  }
+}
+
+// Create a registry.
+export function createRegistry(registryData) {
+  validateRegistryFields(registryData, false);
+
+  return addRecord(STORAGE_KEYS.registries, buildRegistry(registryData));
+}
+
+// Save or update an unfinished registry.
+export function saveRegistryDraft(registryData) {
+  if (!registryData.id) {
+    validateRegistryFields(registryData, true);
+
+    return addRecord(
+      STORAGE_KEYS.registries,
+      buildRegistry(registryData)
+    );
+  }
+
+  return updateRegistry(registryData.id, registryData);
+}
+
+// Update registry details, change visibility, or publish a draft.
+export function updateRegistry(registryId, changes) {
+  const registries = readList(STORAGE_KEYS.registries);
+  const registryIndex = registries.findIndex(
+    (registry) => registry.id === registryId
+  );
+
+  if (registryIndex === -1) {
+    throw new Error("Registry not found.");
+  }
+
+  const current = registries[registryIndex];
+
+  if (current.ownerId !== getCurrentUserId()) {
+    throw new Error("Only the owner can update this registry.");
+  }
+
+  const { id, ownerId, isHidden, createdAt, ...safeChanges } = changes;
+
+  const updated = {
+    ...current,
+    ...safeChanges,
+    updatedAt: new Date().toISOString(),
+  };
+
+  validateRegistryFields(
+    updated,
+    updated.status === REGISTRY_STATUS.DRAFT
+  );
+
+  if (!Object.values(REGISTRY_STATUS).includes(updated.status)) {
+    throw new Error("Invalid registry status.");
+  }
+
+  registries[registryIndex] = updated;
+  saveList(STORAGE_KEYS.registries, registries);
+
+  return updated;
+}         
 
 //Guest Functions
 
