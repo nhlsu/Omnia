@@ -225,6 +225,53 @@ export function reserveGift(reservationData) {
 
 
 
+// Find a guest's reservation on this wishlist using the 6-character code (G5, W16).
+export function findReservationByCode(code, registryId) {
+
+  // STEP 1: clean the code so "  k7q2mz " works the same as "K7Q2MZ"
+  const cleanCode = code ? code.trim().toUpperCase() : "";
+
+  if (cleanCode.length !== 6) {
+    throw new Error("We couldn't find a reservation with this code.");
+  }
+
+  // STEP 2: the code must match a reservation ON THIS wishlist
+  const reservations = readList(STORAGE_KEYS.reservations);
+  const reservation = reservations.find(
+    (item) => item.code === cleanCode && item.registryId === registryId
+  );
+
+  if (!reservation) {
+    throw new Error("We couldn't find a reservation with this code.");
+  }
+
+  return reservation;
+}
+
+
+
+
+
+
+
+// Cancel a reservation (G5). The gift goes back to Available automatically.
+export function cancelReservation(reservationId) {
+  const reservations = readList(STORAGE_KEYS.reservations);
+  const reservation = reservations.find((item) => item.id === reservationId);
+
+  if (!reservation) {
+    throw new Error("We couldn't find a reservation with this code.");
+  }
+
+  saveList(
+    STORAGE_KEYS.reservations,
+    reservations.filter((item) => item.id !== reservationId)
+  );
+
+  return reservation;
+}
+
+
 
 
 
