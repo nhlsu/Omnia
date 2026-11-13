@@ -357,10 +357,17 @@ export const REGISTRY_STATUS = {
 };
 
 export const NOTE_MAX_LENGTH = 200;
+function requireLogin() {
+  const userId = getCurrentUserId();
+  if (!userId) {
+    throw new Error("Please log in first.");
+  }
+  return userId;
+}
 
 function buildRegistry(registryData) {
   return {
-    ownerId: getCurrentUserId(),
+    ownerId: requireLogin(),
     name: registryData.name?.trim() ?? "",
     occasionTypeId: registryData.occasionTypeId ?? null,
     date: registryData.date || null,
@@ -464,7 +471,7 @@ export function updateRegistry(registryId, changes) {
 
   const current = registries[registryIndex];
 
-  if (current.ownerId !== getCurrentUserId()) {
+  if (current.ownerId !== requireLogin()) {
     throw new Error("Only the owner can update this registry.");
   }
 
@@ -502,7 +509,7 @@ function getOwnedRegistry(registryId) {
     throw new Error("Registry not found.");
   }
 
-  if (registry.ownerId !== getCurrentUserId()) {
+  if (registry.ownerId !== requireLogin()) {
     throw new Error("Only the owner can modify this registry.");
   }
 
@@ -664,9 +671,10 @@ export function canViewRegistry(registryId, accessSource) {
   if (!registry) {
     return false;
   }
-  if (registry.ownerId === getCurrentUserId()) {
-    return true;
-  }
+  const userId = getCurrentUserId();
+ if (userId && userId === registry.ownerId) {
+  return true;
+}
   if (
     registry.visibility === VISIBILITY.LINK_ONLY &&
     accessSource !== "link"
