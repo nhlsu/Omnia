@@ -3,6 +3,7 @@ import { getGuestWishlist } from "../../AppContext.jsx";
 import GuestHeader from "../../components/guest/GuestHeader.jsx";
 import WishlistUnavailable from "../../components/guest/WishlistUnavailable.jsx";
 import GiftCard from "../../components/guest/GiftCard.jsx";
+import "./guest.css";
 import "./GuestWishlistPage.css";
 
 // "2026-10-24" -> "24 October 2026" (empty if there's no date)
