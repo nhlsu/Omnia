@@ -227,6 +227,46 @@ export function addGift(giftData) {
 
   return addRecord(STORAGE_KEYS.gifts, gift);
 }
+// Update gift details or quantity ([W9] Edit gift).
+export function updateGift(giftId, changes) {
+  const gifts = readList(STORAGE_KEYS.gifts);
+  const giftIndex = gifts.findIndex((gift) => gift.id === giftId);
+
+  if (giftIndex === -1) {
+    throw new Error("Gift not found.");
+  }
+
+  const current = gifts[giftIndex];
+  getOwnedRegistry(current.registryId);
+
+  const { id, registryId, createdAt, ...safeChanges } = changes;
+
+  const updated = {
+    ...current,
+    ...safeChanges,
+    updatedAt: new Date().toISOString(),
+  };
+
+  if ("price" in changes) {
+    updated.price = buildGift({ price: changes.price }).price;
+  }
+
+  if ("quantity" in changes) {
+    updated.quantity = buildGift({ quantity: changes.quantity }).quantity;
+  }
+
+  if ("isGroupGift" in changes) {
+    updated.isGroupGift = buildGift({
+      isGroupGift: changes.isGroupGift,
+    }).isGroupGift;
+  }
+
+  validateGiftFields(updated);
+
+  gifts[giftIndex] = updated;
+  saveList(STORAGE_KEYS.gifts, gifts);
+  return updated;
+}
 //Guest Functions
 
 // Report a public wishlist or one of its gifts (W19). Saved as "open" for the admin.
