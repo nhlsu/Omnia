@@ -9,7 +9,7 @@ import {
   updateStore as sharedUpdateStore,
   addOccasionType as sharedAddOccasionType,
   updateOccasionType as sharedUpdateOccasionType,
-} from "./AppContext";
+} from "../../AppContext";
 
 // Display labels are mapped here; stored values stay lowercase.
 export function loadAdminData() {
