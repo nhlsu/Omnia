@@ -23,7 +23,7 @@ function GuestWishlistPage() {
   const { registryId } = useParams();
   const [isReportOpen, setIsReportOpen] = useState(false);               
 
-  let wishlist = null;
+  let wishlist;
   try {
     wishlist = getGuestWishlist(registryId);
   } catch {
@@ -55,7 +55,28 @@ function GuestWishlistPage() {
       />
 
       <main className="guest-wishlist">
-        {/* ... everything inside <main> stays exactly the same ... */}
+        <h1 className="guest-wishlist__title">{registry.name}</h1>
+        {subtitle && <p className="guest-wishlist__subtitle">{subtitle}</p>}
+
+        {registry.note && (
+          <section className="guest-wishlist__note">
+            <h2 className="guest-wishlist__note-title">A note from {ownerName || "the host"}</h2>
+            <p className="guest-wishlist__note-text">{registry.note}</p>
+          </section>
+        )}
+
+        <div className="guest-wishlist__gifts">
+          {gifts.length === 0 && (
+            <p className="guest-wishlist__empty">No gifts have been added yet.</p>
+          )}
+          {gifts.map((gift) => (
+            <GiftCard key={gift.id} gift={gift} registryId={registry.id} />
+          ))}
+        </div>
+
+        <Link className="guest-wishlist__manage" to={`/wishlist/${registry.id}/manage`}>
+          Manage my reservation
+        </Link>
       </main>
 
       {isReportOpen && (                                                    

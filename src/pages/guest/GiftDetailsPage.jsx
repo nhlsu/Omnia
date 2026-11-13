@@ -21,7 +21,7 @@ function GiftDetailsPage() {
   const [isReportOpen, setIsReportOpen] = useState(false);
 
 
-  let wishlist = null;
+  let wishlist;
   try {
     wishlist = getGuestWishlist(registryId);
   } catch {

@@ -32,7 +32,7 @@ function GroupGiftNotesPage() {
   const [text, setText] = useState("");
   const [error, setError] = useState("");
 
-  let wishlist = null;
+  let wishlist;
   try {
     wishlist = getGuestWishlist(registryId);
   } catch {
@@ -58,7 +58,7 @@ function GroupGiftNotesPage() {
   const myContributionId = getMyContributionId(gift.id);
 
   // Only contributors can read the thread (G7). Without a ticket getGiftNotes throws.
-  let notes = null;
+  let notes;
   try {
     notes = getGiftNotes(gift.id, myContributionId);
   } catch {

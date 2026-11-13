@@ -29,7 +29,7 @@ function GroupGiftPage() {
   try {
     wishlist = getGuestWishlist(registryId);
   } catch {
-    wishlist = null;
+    wishlist;
   }
 
   const gift = wishlist ? wishlist.gifts.find((item) => item.id === giftId) : null;
