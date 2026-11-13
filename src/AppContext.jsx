@@ -40,6 +40,305 @@ function addRecord(key, data) {
 
 //Account Functions
 
+const ACCOUNT_SESSION_KEY = "omnia_current_user_id";
+const RESET_REQUESTS_KEY = "omnia_password_reset_requests";
+const DEMO_RESET_TOKEN_KEY = "omnia_demo_reset_token";
+const PASSWORD_ITERATIONS = 600000;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Convert bytes to a hexadecimal string
+function hex(bytes) {
+  return Array.from(bytes, (byte) =>
+    byte.toString(16).padStart(2, "0")
+  ).join("");
+}
+
+function randomHex(size = 16) {
+  return hex(crypto.getRandomValues(new Uint8Array(size)));
+}
+
+// Hash passwords for the front-end demo
+async function hashPassword(password, saltHex) {
+  const salt = Uint8Array.from(
+    saltHex.match(/.{2}/g),
+    (part) => parseInt(part, 16)
+  );
+
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(password),
+    "PBKDF2",
+    false,
+    ["deriveBits"]
+  );
+
+  const bits = await crypto.subtle.deriveBits(
+    {
+      name: "PBKDF2",
+      salt,
+      iterations: PASSWORD_ITERATIONS,
+      hash: "SHA-256",
+    },
+    key,
+    256
+  );
+
+  return hex(new Uint8Array(bits));
+}
+
+async function hashToken(token) {
+  const bits = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(token)
+  );
+  return hex(new Uint8Array(bits));
+}
+
+function checkPassword(password) {
+  if (
+    typeof password !== "string" ||
+    password.length < 8 ||
+    !/[a-zA-Z]/.test(password) ||
+    !/[0-9]/.test(password)
+  ) {
+    throw new Error(
+      "Password must be at least 8 characters with a letter and a number."
+    );
+  }
+}
+
+// Return user details without password information
+function publicUser(user) {
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    status: user.status,
+    createdAt: user.createdAt,
+  };
+}
+
+// A1: Create a new account
+export async function registerUser(userData) {
+  const name = userData?.name?.trim() ?? "";
+  const email = userData?.email?.trim().toLowerCase() ?? "";
+  const password = userData?.password ?? "";
+  const confirmPassword = userData?.confirmPassword ?? "";
+
+  if (!name || !email || !password || !confirmPassword) {
+    throw new Error("All fields are required.");
+  }
+
+  if (!EMAIL_PATTERN.test(email)) {
+    throw new Error("Please enter a valid email.");
+  }
+
+  checkPassword(password);
+
+  if (password !== confirmPassword) {
+    throw new Error("Passwords do not match.");
+  }
+
+  const users = readList(STORAGE_KEYS.users);
+
+  if (users.some((user) =>
+    user.email?.trim().toLowerCase() === email
+  )) {
+    throw new Error("This email is already registered. Log in instead?");
+  }
+
+  const passwordSalt = randomHex();
+  const passwordHash = await hashPassword(password, passwordSalt);
+
+  const user = addRecord(STORAGE_KEYS.users, {
+    name,
+    email,
+    passwordSalt,
+    passwordHash,
+    role: "owner",
+    status: "active",
+    failedAttempts: 0,
+    lockedUntil: null,
+  });
+
+  sessionStorage.setItem(ACCOUNT_SESSION_KEY, user.id);
+
+  return publicUser(user);
+}
+
+// A2: Log in
+export async function loginUser(email, password) {
+  const cleanEmail = email?.trim().toLowerCase() ?? "";
+
+  if (!cleanEmail || !password) {
+    throw new Error("Email and password are required.");
+  }
+
+  const users = readList(STORAGE_KEYS.users);
+  const index = users.findIndex((user) =>
+    user.email?.trim().toLowerCase() === cleanEmail
+  );
+
+  if (index === -1) {
+    throw new Error("Email or password is incorrect.");
+  }
+
+  const user = users[index];
+
+  if (user.status === "suspended") {
+    throw new Error("Your account is suspended. Contact support.");
+  }
+
+  if (
+    user.lockedUntil &&
+    new Date(user.lockedUntil).getTime() > Date.now()
+  ) {
+    throw new Error("Account locked. Try again after 15 minutes.");
+  }
+
+  const actualHash = user.passwordSalt && user.passwordHash
+    ? await hashPassword(password, user.passwordSalt)
+    : null;
+
+  if (!actualHash || actualHash !== user.passwordHash) {
+    const failures = (user.failedAttempts ?? 0) + 1;
+
+    users[index] = {
+      ...user,
+      failedAttempts: failures >= 5 ? 0 : failures,
+      lockedUntil: failures >= 5
+        ? new Date(Date.now() + 15 * 60 * 1000).toISOString()
+        : null,
+    };
+
+    saveList(STORAGE_KEYS.users, users);
+
+    throw new Error(
+      failures >= 5
+        ? "Account locked. Try again after 15 minutes."
+        : "Email or password is incorrect."
+    );
+  }
+
+  users[index] = {
+    ...user,
+    failedAttempts: 0,
+    lockedUntil: null,
+  };
+
+  saveList(STORAGE_KEYS.users, users);
+  sessionStorage.setItem(ACCOUNT_SESSION_KEY, user.id);
+
+  return publicUser(users[index]);
+}
+
+// A2: Log out
+export function logoutUser() {
+  sessionStorage.removeItem(ACCOUNT_SESSION_KEY);
+  return { success: true };
+}
+
+// A3: Request a password reset
+export async function requestPasswordReset(email) {
+  const cleanEmail = email?.trim().toLowerCase() ?? "";
+
+  if (!EMAIL_PATTERN.test(cleanEmail)) {
+    throw new Error("Please enter a valid email.");
+  }
+
+  const user = readList(STORAGE_KEYS.users).find(
+    (item) => item.email?.trim().toLowerCase() === cleanEmail
+  );
+
+  sessionStorage.removeItem(DEMO_RESET_TOKEN_KEY);
+
+  if (user) {
+    const token = randomHex(32);
+    const tokenHash = await hashToken(token);
+
+    const requests = readList(RESET_REQUESTS_KEY).filter(
+      (item) =>
+        item.userId !== user.id &&
+        new Date(item.expiresAt).getTime() > Date.now()
+    );
+
+    requests.push({
+      userId: user.id,
+      tokenHash,
+      expiresAt: new Date(
+        Date.now() + 30 * 60 * 1000
+      ).toISOString(),
+    });
+
+    saveList(RESET_REQUESTS_KEY, requests);
+
+    // Demo only: no real email is sent
+    sessionStorage.setItem(DEMO_RESET_TOKEN_KEY, token);
+  }
+
+  return {
+    message: "If this email is registered, a reset link has been sent.",
+  };
+}
+
+// A3: Set a new password
+export async function resetPassword(token, newPassword) {
+  checkPassword(newPassword);
+
+  const tokenHash = await hashToken(token ?? "");
+  const requests = readList(RESET_REQUESTS_KEY);
+
+  const request = requests.find(
+    (item) => item.tokenHash === tokenHash
+  );
+
+  if (
+    !request ||
+    new Date(request.expiresAt).getTime() <= Date.now()
+  ) {
+    throw new Error("This link has expired.");
+  }
+
+  const users = readList(STORAGE_KEYS.users);
+  const index = users.findIndex(
+    (item) => item.id === request.userId
+  );
+
+  if (index === -1) {
+    throw new Error("This link has expired.");
+  }
+
+  const passwordSalt = randomHex();
+  const passwordHash = await hashPassword(
+    newPassword,
+    passwordSalt
+  );
+
+  users[index] = {
+    ...users[index],
+    passwordHash,
+    passwordSalt,
+    failedAttempts: 0,
+    lockedUntil: null,
+    updatedAt: new Date().toISOString(),
+  };
+
+  saveList(STORAGE_KEYS.users, users);
+
+  saveList(
+    RESET_REQUESTS_KEY,
+    requests.filter((item) => item.userId !== request.userId)
+  );
+
+  sessionStorage.removeItem(DEMO_RESET_TOKEN_KEY);
+
+  return {
+    success: true,
+    message: "Password reset successfully. Log in again.",
+  };
+}
+
 
 
 
@@ -89,9 +388,24 @@ function buildGift(giftData) {
   };
 }
 
-// TEMPORARY: remove once a teammate adds the real current-user function in //Account Functions
-function getCurrentUserId() {
-  return "demo-owner";
+// Returns the current user's ID if logged in, or null if not. Checks that the user is active.
+export function getCurrentUserId() {
+  const userId = sessionStorage.getItem(ACCOUNT_SESSION_KEY);
+
+  if (!userId) {
+    return null;
+  }
+
+  const user = readList(STORAGE_KEYS.users).find(
+    (item) => item.id === userId
+  );
+
+  if (!user || user.status !== "active") {
+    sessionStorage.removeItem(ACCOUNT_SESSION_KEY);
+    return null;
+  }
+
+  return user.id;
 }
 
 // Shared checks for registry fields.
