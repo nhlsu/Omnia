@@ -662,6 +662,29 @@ export function getGiftNotes(giftId, contributionId) {
 
 
 
+// Contributors of a group gift for W17 (G6, G8). Anonymous names are hidden from the owner only.
+export function getGiftContributors(giftId) {
+
+  // STEP 1: the gift exists and its wishlist is open to guests
+  const gift = readList(STORAGE_KEYS.gifts).find((item) => item.id === giftId);
+
+  if (!gift) {
+    throw new Error("Gift not found.");
+  }
+
+  getOpenRegistry(gift.registryId);
+
+  // STEP 2: this gift's pledges, oldest first, with ONLY the safe fields
+  return readList(STORAGE_KEYS.contributions)
+    .filter((item) => item.giftId === giftId)
+    .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+    .map((item) => ({
+      displayName: item.displayName,
+      amount: item.amount,
+      isAnonymous: item.isAnonymous,
+    }));
+}
+
 //Admin Functions
 
 
