@@ -1,11 +1,27 @@
-/* Logo bar from the Figma header (37px tall, 20px side padding). */
 .guest-header {
   display: flex;
   align-items: center;
-  height: 37px;
-  padding: 0 20px;
+  justify-content: space-between;
+  min-height: 44px;
+  padding: 0 12px 0 20px;
 }
 
+.guest-header__menu {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 10px;
+  background: none;
+  color: var(--color-text-muted, #6e667a);
+  cursor: pointer;
+}
+
+.guest-header__menu:hover {
+  background: var(--color-primary-lighter, #eee4f6);
+}
 .guest-header__logo {
   display: inline-flex;
   align-items: center;

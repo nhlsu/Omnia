@@ -1,0 +1,75 @@
+/* W19 – Report sheet. The frame comes from ReserveSheet.css. */
+.report__intro {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-text-muted, #6e667a);
+}
+
+.report__reasons {
+  margin: 0 0 8px;
+  padding: 0;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Read by screen readers, hidden on screen */
+.report__legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.report__option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 46px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  border: 1px solid var(--color-track, #e0d7ea);
+  border-radius: 10px;
+  background: var(--color-surface, #ffffff);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text, #221c32);
+  cursor: pointer;
+}
+
+.report__option--selected {
+  border: 1.5px solid var(--color-primary, #5f46ad);
+}
+
+.report__option input {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--color-primary, #5f46ad);
+}
+
+.report__details {
+  margin: 8px 0 16px;
+}
+
+.report__textarea {
+  height: auto;
+  min-height: 80px;
+  padding: 12px 16px;
+  line-height: 22px;
+  resize: vertical;
+}
+
+.report__thanks {
+  margin: 8px 0 20px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--color-success-bg, #e2f3ea);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-success, #2b7857);
+}

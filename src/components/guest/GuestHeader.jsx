@@ -1,7 +1,8 @@
 import "./GuestHeader.css";
 
-// Omnia logo bar at the top of the guest screens (W12, W12b, W19).
-function GuestHeader() {
+// Omnia logo bar at the top of the guest screens (W12, W12b).
+// Pass onReport to show the "•••" button (W12, public wishlists only).
+function GuestHeader({ onReport }) {
   return (
     <header className="guest-header">
       <span className="guest-header__logo">
@@ -12,9 +13,23 @@ function GuestHeader() {
         </svg>
         omnia
       </span>
+
+      {onReport && (
+        <button
+          type="button"
+          className="guest-header__menu"
+          aria-label="Report this wishlist"
+          onClick={onReport}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <circle cx="5" cy="12" r="2" />
+            <circle cx="12" cy="12" r="2" />
+            <circle cx="19" cy="12" r="2" />
+          </svg>
+        </button>
+      )}
     </header>
   );
 }
 
 export default GuestHeader;
-
