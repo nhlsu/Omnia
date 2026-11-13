@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ReserveSheet from "../../components/guest/ReserveSheet.jsx";
+import ReportModal from "../../components/guest/ReportModal.jsx";
 import { Link, useParams } from "react-router-dom";
 import { getGuestWishlist, GIFT_STATUS, VISIBILITY } from "../../AppContext.jsx";
 import GuestHeader from "../../components/guest/GuestHeader.jsx";
@@ -17,6 +18,8 @@ function GiftDetailsPage() {
 
   // Changing this number makes the page read the gift again (after a conflict)
   const [, setDataVersion] = useState(0);
+  const [isReportOpen, setIsReportOpen] = useState(false);
+
 
   let wishlist = null;
   try {
@@ -130,7 +133,7 @@ function GiftDetailsPage() {
           )}
 
           {isPublic && (
-            <button type="button" className="guest-link">
+            <button type="button" className="guest-link" onClick={() => setIsReportOpen(true)}>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
                 <line x1="4" x2="4" y1="22" y2="15" />
@@ -150,8 +153,15 @@ function GiftDetailsPage() {
           onConflict={() => setDataVersion((version) => version + 1)}
         />
       )}
+
+      {isReportOpen && (
+        <ReportModal registryId={registry.id} giftId={gift.id} onClose={() => setIsReportOpen(false)} />
+      )}
+
+
     </div>
   );
+  
 }
 
 export default GiftDetailsPage;
