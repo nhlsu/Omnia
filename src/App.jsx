@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Placeholder from "./pages/Placeholder.jsx";
 import HomePage from "./pages/owner/HomePage.jsx";
-
+import CreateWishlistPage from "./pages/owner/CreateWishlistPage.jsx";
 // All app screens. Screen numbers (W1–W26) match the Figma file.
 // When your page is ready, replace its <Placeholder /> with your component.
 // W14, W14b and W19 are pop-ups (not pages), and W12b is a state inside W12, so they have no route.
@@ -16,7 +16,7 @@ function App() {
 
       {/* 2 · Registry Owner */}
       <Route path="/" element={<HomePage />} />
-      <Route path="/my-wishlists/new" element={<Placeholder title="W5 · Create wishlist – Details" />} />
+      <Route path="/my-wishlists/new" element={<CreateWishlistPage />} />
       <Route path="/my-wishlists/:registryId" element={<Placeholder title="W8 · Wishlist – owner view" />} />
       <Route path="/my-wishlists/:registryId/gifts/new" element={<Placeholder title="W6 / W7 · Add a gift" />} />
       <Route path="/my-wishlists/:registryId/gifts/:giftId/edit" element={<Placeholder title="W9 · Edit gift" />} />

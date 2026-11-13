@@ -422,11 +422,15 @@ export function getCurrentUser() {
   if (!userId) {
     return null;
   }
-
   const user = readList(STORAGE_KEYS.users).find((item) => item.id === userId);
   return user ? publicUser(user) : null;
 }
-
+// Occasion types the owner can pick from on W5 (only the ones the admin left active).
+export function getActiveOccasionTypes() {
+  return readList(STORAGE_KEYS.occasionTypes).filter(
+    (occasionType) => occasionType.isActive === true
+  );
+}
 // Shared checks for registry fields.
 function validateRegistryFields(data, isDraft = false) {
   if (!data.name?.trim()) {

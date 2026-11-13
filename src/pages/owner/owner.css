@@ -38,3 +38,18 @@
 .owner-page a {
   text-decoration: none;
 }
+/* Undo two template defaults on owner pages:
+   1. padding and borders count inside a box's width/height (so inputs line up)
+   2. form fields use the page font (the textarea was showing a monospace font) */
+.owner-page *,
+.owner-page *::before,
+.owner-page *::after {
+  box-sizing: border-box;
+}
+
+.owner-page input,
+.owner-page select,
+.owner-page textarea,
+.owner-page button {
+    font-family: inherit;
+}

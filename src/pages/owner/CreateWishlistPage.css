@@ -1,0 +1,96 @@
+/* 3-step progress bar under the header: 4px bars, 6px apart, step 1 filled */
+.steps {
+  display: flex;
+  gap: 6px;
+  padding: 6px 20px 0;
+}
+
+.steps__bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--color-primary-soft);
+}
+
+.steps__bar--done {
+  background: var(--color-primary);
+}
+
+/* Title and subtitle: same sizes as the Home greeting */
+.create__title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.create__subtitle {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* One form field: 13px semibold label, 8px above a white rounded input */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.field__input {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.field__input:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -1px;
+}
+
+.field__textarea {
+  min-height: 64px;
+  resize: vertical;
+}
+
+.field__counter {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* Light-purple info box (W5 "New wishlists are Link only…") */
+.create__info {
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--owner-tint);
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+/* Validator message in red */
+.create__error {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-danger);
+}
+
+/* Full-width purple button, same as the Home button */
+.create__button {
+  padding: 13px 16px;
+  border: none;
+  border-radius: 10px;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}

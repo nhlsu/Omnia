@@ -1,0 +1,22 @@
+/* "‹ Back" bar (W5, W8, W9, W10, W11): purple back link on the left,
+   optional muted text or action on the right. Same side padding as the page (20px). */
+.back-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px 6px;
+}
+
+.back-header__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.back-header__right {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
