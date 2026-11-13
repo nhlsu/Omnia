@@ -227,6 +227,55 @@ export function addGift(giftData) {
 
   return addRecord(STORAGE_KEYS.gifts, gift);
 }
+
+// Fetch product info from a URL ([W7] "Add gift" -> "Paste link").
+// This is a placeholder for now. In the future, it will fetch real data from the store's website.
+// The store must be in the supported stores list, and the URL must match its domain.
+export function fetchProductInfo(productUrl) {
+  if (!productUrl || !productUrl.trim()) {
+    throw new Error("Please paste a product link.");
+  }
+
+  let url;
+
+  try {
+    url = new URL(productUrl.trim());
+
+    if (url.protocol !== "https:" && url.protocol !== "http:") {
+      throw new Error("Invalid protocol.");
+    }
+  } catch {
+    throw new Error("That doesn't look like a valid link.");
+  }
+
+  
+  const domain = url.hostname.toLowerCase().replace(/^www\./, "");
+
+  const stores = readList(STORAGE_KEYS.stores);
+
+  const store = stores.find(
+    (item) =>
+      item.isActive === true &&
+      item.domain?.trim().toLowerCase().replace(/^www\./, "") === domain
+  );
+
+  if (!store) {
+    throw new Error(
+      "This store isn't supported yet. Add the gift details manually."
+    );
+  }
+
+  
+  return {
+    name: "Sample gift",
+    price: 150,
+    imageUrl: null,
+    productUrl: url.href,
+    storeName: store.name,
+    quantity: 1,
+  };
+}
+
 // Update gift details or quantity ([W9] Edit gift).
 export function updateGift(giftId, changes) {
   const gifts = readList(STORAGE_KEYS.gifts);
