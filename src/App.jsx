@@ -5,6 +5,8 @@ import GiftDetailsPage from "./pages/guest/GiftDetailsPage.jsx";
 import ReservationConfirmedPage from "./pages/guest/ReservationConfirmedPage.jsx";
 import ManageReservationPage from "./pages/guest/ManageReservationPage.jsx";
 import GroupGiftPage from "./pages/guest/GroupGiftPage.jsx";
+import GroupGiftNotesPage from "./pages/guest/GroupGiftNotesPage.jsx";
+
 
 // All app screens. Screen numbers (W1–W26) match the Figma file.
 // When your page is ready, replace its <Placeholder /> with your component.
@@ -34,7 +36,7 @@ function App() {
       <Route path="/wishlist/:registryId/reserved" element={<ReservationConfirmedPage />} />
           <Route path="/wishlist/:registryId/manage" element={<ManageReservationPage />} />
       <Route path="/wishlist/:registryId/gift/:giftId/group" element={<GroupGiftPage />} />
-      <Route path="/wishlist/:registryId/gift/:giftId/notes" element={<Placeholder title="W18 · Group gift notes" />} />
+      <Route path="/wishlist/:registryId/gift/:giftId/notes" element={<GroupGiftNotesPage />} />
 
       {/* 4 · Admin */}
       <Route path="/admin" element={<Placeholder title="W20 · Admin dashboard" />} />
