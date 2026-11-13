@@ -267,6 +267,20 @@ export function updateGift(giftId, changes) {
   saveList(STORAGE_KEYS.gifts, gifts);
   return updated;
 }
+// Remove a gift ([W9b] confirmation).
+export function removeGift(giftId) {
+  const gift = readList(STORAGE_KEYS.gifts).find(
+    (item) => item.id === giftId
+  );
+
+  if (!gift) {
+    throw new Error("Gift not found.");
+  }
+
+  getOwnedRegistry(gift.registryId);
+
+  return deleteGift(giftId);
+}
 //Guest Functions
 
 // Report a public wishlist or one of its gifts (W19). Saved as "open" for the admin.
