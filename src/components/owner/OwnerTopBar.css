@@ -1,0 +1,30 @@
+/* Figma "Header" (W4): logo on the left, 34px avatar on the right.
+   The "9:41 •••" row above it in Figma is the phone's status bar, so we don't build it. */
+.owner-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px 6px;
+}
+
+.owner-topbar__logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.owner-topbar__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: 700;
+}

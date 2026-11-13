@@ -1,0 +1,40 @@
+/* Shared frame for all owner screens (like guest.css for the guest screens).
+   It also undoes the Vite template styles in index.css, for owner pages only. */
+.owner-page {
+  /* Figma tints that aren't in the team theme, kept local to owner pages */
+  --owner-tint: #eee4f6;
+  --owner-success-bg: #e2f3ea;
+  --owner-warning-bg: #fdf2d9;
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 430px;
+  min-height: 100svh;
+  margin: 0 auto;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: left;
+}
+
+/* Figma "Content": 20px side padding, 16px top and bottom, 16px gap between blocks */
+.owner-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 20px;
+}
+
+.owner-page h1,
+.owner-page h2,
+.owner-page p {
+  margin: 0;
+}
+/* Links on owner pages: no default blue underline */
+.owner-page a {
+  text-decoration: none;
+}

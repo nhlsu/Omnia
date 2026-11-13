@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Placeholder from "./pages/Placeholder.jsx";
+import HomePage from "./pages/owner/HomePage.jsx";
 
 // All app screens. Screen numbers (W1–W26) match the Figma file.
 // When your page is ready, replace its <Placeholder /> with your component.
@@ -14,7 +15,7 @@ function App() {
       <Route path="/reset-password" element={<Placeholder title="W3b · Set new password" />} />
 
       {/* 2 · Registry Owner */}
-      <Route path="/" element={<Placeholder title="W4 · Home" />} />
+      <Route path="/" element={<HomePage />} />
       <Route path="/my-wishlists/new" element={<Placeholder title="W5 · Create wishlist – Details" />} />
       <Route path="/my-wishlists/:registryId" element={<Placeholder title="W8 · Wishlist – owner view" />} />
       <Route path="/my-wishlists/:registryId/gifts/new" element={<Placeholder title="W6 / W7 · Add a gift" />} />
