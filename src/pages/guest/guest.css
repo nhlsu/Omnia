@@ -66,4 +66,5 @@
   font-weight: 600;
   color: var(--color-primary, #5f46ad);
   cursor: pointer;
+  text-decoration: none;
 }
