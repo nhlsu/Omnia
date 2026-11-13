@@ -769,7 +769,6 @@ export function getGiftStatus(giftId) {
   };
 }
 
-
 // Everything W12 needs: the wishlist, its occasion name, and its gifts with their status (G1, G3).
 export function getGuestWishlist(registryId) {
 
@@ -786,14 +785,17 @@ export function getGuestWishlist(registryId) {
     .filter((gift) => gift.registryId === registry.id)
     .map((gift) => ({ ...gift, ...getGiftStatus(gift.id) }));
 
+  // STEP 4: the owner's first name, for "Elham's birthday" and "A note from Elham"
+  const owner = readList(STORAGE_KEYS.users).find((user) => user.id === registry.ownerId);
+  const ownerName = owner?.fullName ? owner.fullName.split(" ")[0] : "";
+
   return {
     registry,
     occasionName: occasion ? occasion.name : "",
+    ownerName,
     gifts,
   };
 }
-
-
 
 // Notes in a group gift thread, oldest first (G7). Only contributors to this gift can read them.
 export function getGiftNotes(giftId, contributionId) {
