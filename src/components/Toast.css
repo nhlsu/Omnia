@@ -1,0 +1,53 @@
+
+.omnia-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: max-content;
+  max-width: calc(100vw - 40px);
+  padding: 14px 18px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--color-primary);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: var(--font-family);
+  font-size: 14px;
+}
+
+.omnia-toast--success {
+  border-left-color: var(--color-success);
+}
+
+.omnia-toast--danger {
+  border-left-color: var(--color-danger);
+}
+
+.omnia-toast--warning {
+  border-left-color: var(--color-warning);
+}
+
+.omnia-toast__close {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: var(--color-text-muted);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .omnia-toast {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: none;
+  }
+}

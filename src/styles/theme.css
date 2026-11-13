@@ -1,0 +1,29 @@
+
+:root {
+  /* Main colors */
+  --color-primary: #5f46ad;
+  --color-text: #282234;
+  --color-text-muted: #746d7c;
+
+  /* Backgrounds */
+  --color-bg: #f6eeef;
+  --color-surface: #ffffff;
+  --color-border: #e8dde3;
+
+  /* Status colors */
+  --color-success: #267b59;
+  --color-warning: #a5650f;
+  --color-danger: #c62828;
+
+  /* Font and corners */
+  --font-family: Arial, sans-serif;
+  --radius: 8px;
+
+  color-scheme: light;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+}
