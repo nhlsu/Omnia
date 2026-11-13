@@ -1,0 +1,16 @@
+/* Logo bar from the Figma header (37px tall, 20px side padding). */
+.guest-header {
+  display: flex;
+  align-items: center;
+  height: 37px;
+  padding: 0 20px;
+}
+
+.guest-header__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-primary, #5f46ad);
+}
