@@ -1,0 +1,67 @@
+/* Shared styles for all guest screens: page frame, back link and buttons. */
+.guest-page {
+  min-height: 100vh;
+  background: var(--color-bg, #f6eeef);
+  color: var(--color-text, #221c32);
+  font-family: var(--font-family, "Inter", system-ui, sans-serif);
+  text-align: left;
+}
+
+.guest-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-primary, #5f46ad);
+  text-decoration: none;
+}
+
+.guest-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.guest-btn--primary {
+  border: none;
+  background: var(--color-primary, #5f46ad);
+  color: #ffffff;
+}
+
+.guest-btn--outline {
+  border: 1px solid var(--color-track, #e0d7ea);
+  background: var(--color-surface, #ffffff);
+  color: var(--color-primary, #5f46ad);
+}
+
+.guest-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.guest-link {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-primary, #5f46ad);
+  cursor: pointer;
+}

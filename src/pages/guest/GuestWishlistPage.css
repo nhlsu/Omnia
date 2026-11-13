@@ -1,11 +1,4 @@
-/* Shared page frame for the guest screens. */
-.guest-page {
-  min-height: 100vh;
-  background: var(--color-bg, #f6eeef);
-  color: var(--color-text, #221c32);
-  font-family: var(--font-family, "Inter", system-ui, sans-serif);
-  text-align: left;
-}
+
 
 /* W12 – Wishlist, guest view. Sizes from the Figma 390px frame. */
 .guest-wishlist {
