@@ -1,3 +1,5 @@
+import { useState } from "react";
+import ReserveSheet from "../../components/guest/ReserveSheet.jsx";
 import { Link, useParams } from "react-router-dom";
 import { getGuestWishlist, GIFT_STATUS, VISIBILITY } from "../../AppContext.jsx";
 import GuestHeader from "../../components/guest/GuestHeader.jsx";
@@ -9,6 +11,12 @@ import "./GiftDetailsPage.css";
 // W13 – Gift details (G2, G3). Opened from "View" on a gift card.
 function GiftDetailsPage() {
   const { registryId, giftId } = useParams();
+
+// Is the reserve sheet (W14) open?
+  const [isReserveOpen, setIsReserveOpen] = useState(false);
+
+  // Changing this number makes the page read the gift again (after a conflict)
+  const [, setDataVersion] = useState(0);
 
   let wishlist = null;
   try {
@@ -106,7 +114,7 @@ function GiftDetailsPage() {
             </a>
           )}
 
-          <button type="button" className="guest-btn guest-btn--primary" disabled={!canReserve}>
+          <button type="button" className="guest-btn guest-btn--primary" disabled={!canReserve} onClick={() => setIsReserveOpen(true)}>
             Reserve this gift
           </button>
 
@@ -132,6 +140,16 @@ function GiftDetailsPage() {
           )}
         </div>
       </main>
+      {isReserveOpen && (
+        <ReserveSheet
+          gift={gift}
+          registryId={registry.id}
+          ownerName={ownerName}
+          availableUnits={availableUnits}
+          onClose={() => setIsReserveOpen(false)}
+          onConflict={() => setDataVersion((version) => version + 1)}
+        />
+      )}
     </div>
   );
 }

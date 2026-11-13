@@ -47,7 +47,9 @@
 }
 
 .guest-btn:disabled {
-  opacity: 0.45;
+  background: var(--color-track, #e0d7ea);
+  color: var(--color-text-muted, #6e667a);
+  border: none;
   cursor: not-allowed;
 }
 
