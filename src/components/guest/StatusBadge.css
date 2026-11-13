@@ -1,0 +1,30 @@
+/* Status pill from Figma: ~20px tall, 12px text, fully rounded ends. */
+.status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-badge--success {
+  background: var(--color-success-bg, #e2f3ea);
+  color: var(--color-success, #2b7857);
+}
+
+.status-badge--warning {
+  background: var(--color-warning-bg, #fdf2d9);
+  color: var(--color-warning, #99660a);
+}
+
+.status-badge--muted {
+  background: var(--color-primary-lighter, #eee4f6);
+  color: var(--color-text-muted, #6e667a);
+}
+
+.status-badge--primary {
+  background: var(--color-primary-light, #d8c5e9);
+  color: var(--color-primary, #5f46ad);
+}
