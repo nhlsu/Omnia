@@ -281,6 +281,42 @@ export function removeGift(giftId) {
 
   return deleteGift(giftId);
 }
+// Get the registry's sharing link ([W11] Share wishlist).
+export function getRegistryLink(registryId) {
+  const registry = getOwnedRegistry(registryId);
+
+  if (registry.status !== REGISTRY_STATUS.PUBLISHED) {
+    throw new Error("Publish your wishlist before sharing it.");
+  }
+
+  return `${window.location.origin}/wishlist/${registry.id}`;
+}
+// Owners can view hidden, private, and draft registries.
+// Guests are blocked from hidden registries, while public registries remain openly viewable.
+// Link-only registries require access through a shared link.
+export function canViewRegistry(registryId, accessSource) {
+  const registry = readList(STORAGE_KEYS.registries).find(
+    (item) => item.id === registryId
+  );
+  if (!registry) {
+    return false;
+  }
+  if (registry.ownerId === getCurrentUserId()) {
+    return true;
+  }
+  if (
+    registry.visibility === VISIBILITY.LINK_ONLY &&
+    accessSource !== "link"
+  ) {
+    return false;
+  }
+  try {
+    getOpenRegistry(registryId);
+  } catch {
+    return false;
+  }
+  return true;
+}
 //Guest Functions
 
 // Report a public wishlist or one of its gifts (W19). Saved as "open" for the admin.
