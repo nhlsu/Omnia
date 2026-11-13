@@ -1,0 +1,217 @@
+/* W17 – Group gift. Sizes and colours from Figma. */
+.group {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.group__title {
+  margin: 0;
+  font-family: inherit;
+  font-size: 26px;
+  line-height: 34px;
+  font-weight: 700;
+  letter-spacing: normal;
+  color: var(--color-primary, #5f46ad);
+}
+
+/* Gift summary card */
+.group__gift {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  background: var(--color-surface, #ffffff);
+}
+
+.group__gift-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-lighter, #eee4f6);
+  color: var(--color-primary, #5f46ad);
+}
+
+.group__gift-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.group__gift-body strong {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text, #221c32);
+}
+
+.group__gift-body span {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-text-muted, #6e667a);
+}
+
+/* Progress: "SAR 250 of 420 pledged · SAR 170 left" */
+.group__progress {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.group__progress-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--color-text, #221c32);
+}
+
+.group__left {
+  color: var(--color-text-muted, #6e667a);
+}
+
+.group__bar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-track, #e0d7ea);
+  overflow: hidden;
+}
+
+.group__bar-fill {
+  height: 100%;
+  background: var(--color-primary, #5f46ad);
+}
+
+/* Section headings: "Contributors", "Join this gift" */
+.group__section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.group__heading {
+  margin: 0;
+  font-family: inherit;
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+  letter-spacing: normal;
+  color: var(--color-primary, #5f46ad);
+}
+
+/* Contributors list */
+.group__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.group__person {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--color-surface, #ffffff);
+}
+
+.group__avatar {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary-light, #d8c5e9);
+  color: var(--color-primary, #5f46ad);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.group__person-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.group__person-body strong {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text, #221c32);
+}
+
+.group__person-body span {
+  font-size: 13px;
+  color: var(--color-text-muted, #6e667a);
+}
+
+/* Messages */
+.group__success {
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--color-success-bg, #e2f3ea);
+  font-size: 14px;
+  color: var(--color-success, #2b7857);
+}
+
+.group__funded {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--color-success-bg, #e2f3ea);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-text, #221c32);
+}
+
+.group__funded strong {
+  color: var(--color-success, #2b7857);
+}
+
+/* Join form */
+.group__form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* "Omnia records pledges only" box */
+.group__info {
+  margin: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--color-primary-lighter, #eee4f6);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-text, #221c32);
+}
+
+.group__info svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--color-primary, #5f46ad);
+}
+
+/* Desktop: contributors and the form side by side would be crowded, so keep one column but wider */
+@media (min-width: 768px) {
+  .group {
+    max-width: 560px;
+  }
+}
