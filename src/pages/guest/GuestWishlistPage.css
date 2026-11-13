@@ -7,6 +7,95 @@
   text-align: left;
 }
 
-.guest-page__temp {
-  padding: 16px 20px;
+/* W12 – Wishlist, guest view. Sizes from the Figma 390px frame. */
+.guest-wishlist {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px 20px 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.guest-wishlist__title {
+  margin: 0;
+  font-family: inherit;
+  font-size: 26px;
+  line-height: 34px;
+  font-weight: 700;
+  letter-spacing: normal;
+  color: var(--color-primary, #5f46ad);
+}
+
+.guest-wishlist__subtitle {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 18px;
+  color: var(--color-text-muted, #6e667a);
+}
+
+.guest-wishlist__note {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--color-primary-light, #d8c5e9);
+}
+
+.guest-wishlist__note-title {
+  margin: 0;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: normal;
+  color: var(--color-primary, #5f46ad);
+}
+
+.guest-wishlist__note-text {
+  margin: 8px 0 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-text, #221c32);
+}
+
+.guest-wishlist__gifts {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.guest-wishlist__empty {
+  margin: 0;
+  text-align: center;
+  color: var(--color-text-muted, #6e667a);
+}
+
+.guest-wishlist__manage {
+  align-self: center;
+  margin-top: 20px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-primary, #5f46ad);
+  text-decoration: none;
+}
+
+.guest-wishlist__manage:hover {
+  text-decoration: underline;
+}
+
+/* Desktop: a wider page with the gifts in two columns */
+@media (____A____: 768px) {
+  .guest-wishlist {
+    max-width: 760px;
+  }
+
+  .guest-wishlist__gifts {
+    display: ____B____;
+    grid-template-columns: 1fr 1fr;
+  }
+
+
+  .guest-wishlist__empty {
+    grid-column: 1 / -1;
+  }
 }
