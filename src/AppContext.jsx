@@ -840,6 +840,21 @@ export function getGiftContributors(giftId) {
     }));
 }
 
+// This browser remembers the guest's pledge for each gift, like a ticket: { giftId: contributionId }.
+// W17 saves it after pledging; W18 uses it to read and post notes (only contributors may).
+const MY_CONTRIBUTIONS_KEY = "omnia_my_contributions";
+
+export function rememberMyContribution(giftId, contributionId) {
+  const saved = JSON.parse(localStorage.getItem(MY_CONTRIBUTIONS_KEY) || "{}");
+  saved[giftId] = contributionId;
+  localStorage.setItem(MY_CONTRIBUTIONS_KEY, JSON.stringify(saved));
+}
+
+export function getMyContributionId(giftId) {
+  const saved = JSON.parse(localStorage.getItem(MY_CONTRIBUTIONS_KEY) || "{}");
+  return saved[giftId] || null;
+}
+
 
 
 
