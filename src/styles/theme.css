@@ -1,14 +1,15 @@
 
 :root {
   /* Main colors */
-  --color-primary: #5f46ad;
-  --color-text: #282234;
-  --color-text-muted: #746d7c;
+  --color-primary: #5f46ac;
+  --color-text: #211c31;
+  --color-text-muted: #6d667a;
 
   /* Backgrounds */
-  --color-bg: #f6eeef;
+  --color-bg: #f6edee;
   --color-surface: #ffffff;
-  --color-border: #e8dde3;
+  --color-border: #dfd6ea;
+  --color-primary-soft: #d7c5e9;
 
   /* Status colors */
   --color-success: #267b59;
