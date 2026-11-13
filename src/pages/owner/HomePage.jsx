@@ -6,6 +6,7 @@ import {
   VISIBILITY,
 } from "../../AppContext.jsx";
 import OwnerTopBar from "../../components/owner/OwnerTopBar.jsx";
+import BottomNav from "../../components/owner/BottomNav.jsx";
 import { GiftIcon } from "../../components/owner/icons.jsx";
 import "./owner.css";
 import "./HomePage.css";
@@ -73,35 +74,47 @@ function HomePage() {
 
         <h2 className="home__section-title">My wishlists</h2>
 
-        <div className="home-list">
-          {registries.map((registry) => {
-            const isDraft = registry.status === REGISTRY_STATUS.DRAFT;
-            const badgeText = isDraft
-              ? "Draft"
-              : VISIBILITY_LABELS[registry.visibility];
-            const badgeClass = isDraft
-              ? "home-card__badge home-card__badge--draft"
-              : "home-card__badge";
+        {registries.length === 0 ? (
+          <div className="home-empty">
+            <GiftIcon size={28} />
+            <p className="home-empty__title">Your first wish starts here</p>
+            <p className="home-empty__text">
+              Make a list for a birthday, graduation, or just because.
+            </p>
+          </div>
+        ) : (
+          <div className="home-list">
+            {registries.map((registry) => {
+              const isDraft = registry.status === REGISTRY_STATUS.DRAFT;
+              const badgeText = isDraft
+                ? "Draft"
+                : VISIBILITY_LABELS[registry.visibility];
+              const badgeClass = isDraft
+                ? "home-card__badge home-card__badge--draft"
+                : "home-card__badge";
 
-            return (
-              <Link
-                key={registry.id}
-                to={`/my-wishlists/${registry.id}`}
-                className="home-card"
-              >
-                <div className="home-card__info">
-                  <p className="home-card__name">{registry.name}</p>
-                  <p className="home-card__meta">
-                    {registry.occasionName} · {formatDate(registry.date)} ·{" "}
-                    {registry.reservedUnits} of {registry.totalUnits} reserved
-                  </p>
-                </div>
-                <span className={badgeClass}>{badgeText}</span>
-              </Link>
-            );
-          })}
-        </div>
+              return (
+                <Link
+                  key={registry.id}
+                  to={`/my-wishlists/${registry.id}`}
+                  className="home-card"
+                >
+                  <div className="home-card__info">
+                    <p className="home-card__name">{registry.name}</p>
+                    <p className="home-card__meta">
+                      {registry.occasionName} · {formatDate(registry.date)} ·{" "}
+                      {registry.reservedUnits} of {registry.totalUnits} reserved
+                    </p>
+                  </div>
+                  <span className={badgeClass}>{badgeText}</span>
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </main>
+
+      <BottomNav />
     </div>
   );
 }
