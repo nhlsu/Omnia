@@ -1,122 +1,49 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { Routes, Route } from "react-router-dom";
+import Placeholder from "./pages/Placeholder.jsx";
 
+// All app screens. Screen numbers (W1–W26) match the Figma file.
+// When your page is ready, replace its <Placeholder /> with your component.
+// W14, W14b and W19 are pop-ups (not pages), and W12b is a state inside W12, so they have no route.
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <Routes>
+      {/* 1 · Account */}
+      <Route path="/signup" element={<Placeholder title="W1 · Sign up" />} />
+      <Route path="/login" element={<Placeholder title="W2 · Log in" />} />
+      <Route path="/forgot-password" element={<Placeholder title="W3 · Forgot password" />} />
+      <Route path="/reset-password" element={<Placeholder title="W3b · Set new password" />} />
 
-      <div className="ticks"></div>
+      {/* 2 · Registry Owner */}
+      <Route path="/" element={<Placeholder title="W4 · Home" />} />
+      <Route path="/my-wishlists/new" element={<Placeholder title="W5 · Create wishlist – Details" />} />
+      <Route path="/my-wishlists/:registryId" element={<Placeholder title="W8 · Wishlist – owner view" />} />
+      <Route path="/my-wishlists/:registryId/gifts/new" element={<Placeholder title="W6 / W7 · Add a gift" />} />
+      <Route path="/my-wishlists/:registryId/gifts/:giftId/edit" element={<Placeholder title="W9 · Edit gift" />} />
+      <Route path="/my-wishlists/:registryId/settings" element={<Placeholder title="W10 · Wishlist settings" />} />
+      <Route path="/my-wishlists/:registryId/share" element={<Placeholder title="W11 · Share wishlist" />} />
+      <Route path="/profile" element={<Placeholder title="W26 · Profile" />} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      {/* 3 · Guest (no login) – the link matches getRegistryLink: /wishlist/:registryId */}
+      <Route path="/wishlist/:registryId" element={<Placeholder title="W12 · Wishlist – guest view" />} />
+      <Route path="/wishlist/:registryId/gift/:giftId" element={<Placeholder title="W13 · Gift details" />} />
+      <Route path="/wishlist/:registryId/reserved" element={<Placeholder title="W15 · Reservation confirmed" />} />
+      <Route path="/wishlist/:registryId/manage" element={<Placeholder title="W16 · Manage / cancel reservation" />} />
+      <Route path="/wishlist/:registryId/gift/:giftId/group" element={<Placeholder title="W17 · Group gift" />} />
+      <Route path="/wishlist/:registryId/gift/:giftId/notes" element={<Placeholder title="W18 · Group gift notes" />} />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      {/* 4 · Admin */}
+      <Route path="/admin" element={<Placeholder title="W20 · Admin dashboard" />} />
+      <Route path="/admin/users" element={<Placeholder title="W21 · Users – search" />} />
+      <Route path="/admin/users/:userId" element={<Placeholder title="W22 · User details" />} />
+      <Route path="/admin/reports" element={<Placeholder title="W23 · Reports" />} />
+      <Route path="/admin/reports/:reportId" element={<Placeholder title="W23b · Report details" />} />
+      <Route path="/admin/stores" element={<Placeholder title="W24 · Supported stores" />} />
+      <Route path="/admin/occasion-types" element={<Placeholder title="W25 · Occasion types" />} />
+
+      {/* Any link that doesn't match the routes above */}
+      <Route path="*" element={<Placeholder title="Page not found" />} />
+    </Routes>
+  );
 }
 
-export default App
+export default App;
