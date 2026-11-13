@@ -8,7 +8,7 @@
 @media(max-width:380px){.om-setting-row{gap:5px}.om-small-link,.om-kebab{font-size:8px}.om-setting-info{min-width:66px}.om-report-row{gap:7px}.om-report-row .om-status{font-size:7px}.om-user-meta{width:40px}.om-user-row .om-status{font-size:7px}}
 
 /* Lucide icon alignment */
-.om-icon,.om-more,.om-icon-button,.om-text-button,.om-back-button,.om-toast span,.om-modal-close,.om-setting-intro .om-button{display:inline-flex;align-items:center;justify-content:center}
+.om-icon,.om-more,.om-icon-button,.om-text-button,.om-back-button,.om-toast span,.om-modal-close,.om-settings-intro .om-button{display:inline-flex;align-items:center;justify-content:center}
 .om-icon{flex:none}.om-stat-foot{align-items:center}.om-chevron{display:block;flex:none}.om-search svg{flex:none}.om-empty>span svg,.om-report-symbol svg,.om-stat-icon svg,.om-manage-icon svg,.om-square-icon svg,.om-content-symbol svg,.om-modal-icon svg{display:block}
 
 
