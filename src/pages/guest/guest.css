@@ -68,3 +68,27 @@
   cursor: pointer;
   text-decoration: none;
 }
+
+.guest-btn--danger {
+  border: none;
+  background: var(--color-danger, #bf382b);
+  color: #ffffff;
+}
+
+/* Small dark message at the bottom of the screen (e.g. "Reservation cancelled") */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: var(--color-text-dark, #292138);
+  color: #ffffff;
+  font-size: 14px;
+  white-space: nowrap;
+}
