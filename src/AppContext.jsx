@@ -382,6 +382,36 @@ export function getRegistryWithGifts(registryId) {
 
 //Guest Functions
 
+export function getOwnerRegistries() {
+  const ownerId = getCurrentUserId();
+
+  // Get all wishlists belonging to the current user
+  const registries = readList(STORAGE_KEYS.registries)
+    .filter((registry) => registry.ownerId === ownerId);
+
+  // Sort wishlists from newest to oldest
+  registries.sort((a, b) =>
+    new Date(b.createdAt) - new Date(a.createdAt)
+  );
+
+  // Get the information needed for each wishlist card
+  return registries.map((registry) => {
+    const summary = getRegistryWithGifts(registry.id);
+
+    return {
+      id: registry.id,
+      name: registry.name,
+      occasionName: summary.occasionName,
+      date: registry.date ?? null,
+      status: registry.status,
+      visibility: registry.visibility,
+      isHidden: registry.isHidden,
+      reservedUnits: summary.reservedUnits,
+      totalUnits: summary.totalUnits,
+    };
+  });
+}
+
 // Report a public wishlist or one of its gifts (W19). Saved as "open" for the admin.
 export function submitReport(reportData) {
 
