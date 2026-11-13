@@ -642,6 +642,26 @@ export function getGuestWishlist(registryId) {
 
 
 
+// Notes in a group gift thread, oldest first (G7). Only contributors to this gift can read them.
+export function getGiftNotes(giftId, contributionId) {
+
+  // STEP 1: the reader must have pledged to THIS gift (same "ticket" check as addNote)
+  const isContributor = readList(STORAGE_KEYS.contributions).some(
+    (item) => item.id === contributionId && item.giftId === giftId
+  );
+
+  if (!isContributor) {
+    throw new Error("Only contributors to this gift can see notes.");
+  }
+
+  // STEP 2: this gift's notes, oldest first like a chat
+  return readList(STORAGE_KEYS.notes)
+    .filter((note) => note.giftId === giftId)
+    .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+}
+
+
+
 //Admin Functions
 
 
