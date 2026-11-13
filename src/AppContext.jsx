@@ -414,6 +414,17 @@ export function getCurrentUserId() {
 
   return user.id;
 }
+// The logged-in user's public details (name, email, role), or null if nobody is logged in.
+export function getCurrentUser() {
+  const userId = getCurrentUserId();
+
+  if (!userId) {
+    return null;
+  }
+
+  const user = readList(STORAGE_KEYS.users).find((item) => item.id === userId);
+  return user ? publicUser(user) : null;
+}
 
 // Shared checks for registry fields.
 function validateRegistryFields(data, isDraft = false) {
