@@ -50,3 +50,60 @@
   font-size: 14px;
   font-weight: 600;
 }
+/* "My wishlists" heading: 16px semibold purple */
+.home__section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+/* List of cards, 8px apart */
+.home-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* One wishlist card: white, 12px corners, 12px/14px padding, badge on the right */
+.home-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.home-card__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.home-card__name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.home-card__meta {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* Pill badge: light purple, 11px semibold. Purple text for visibility, grey for Draft */
+.home-card__badge {
+  padding: 3px 8px;
+  border-radius: 20px;
+  background: var(--owner-tint);
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.home-card__badge--draft {
+  color: var(--color-text-muted);
+}
