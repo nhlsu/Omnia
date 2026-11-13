@@ -317,6 +317,69 @@ export function canViewRegistry(registryId, accessSource) {
   }
   return true;
 }
+
+
+
+
+// Owner's summary of one gift for W8: the status numbers, who reserved it, and how many pledged.
+export function getGiftSummary(giftId) {
+  const gift = readList(STORAGE_KEYS.gifts).find((item) => item.id === giftId);
+
+  if (!gift) {
+    throw new Error("Gift not found.");
+  }
+
+  // STEP 1: only the owner can see who reserved her gifts
+  getOwnedRegistry(gift.registryId);
+
+  // STEP 2: reuse the counting we already wrote for guests (don't redo it)
+  const statusResult = getGiftStatus(giftId);
+
+  // STEP 3: one name per reservation. Anonymous guests stay hidden from the owner (G8)
+  const reservedBy = readList(STORAGE_KEYS.reservations)
+    .filter((item) => item.giftId === giftId)
+    .map((item) => (item.isAnonymous ? "A guest (anonymous)" : item.displayName));
+
+  // STEP 4: how many people pledged to this gift ("Group gift · 3 contributors")
+  const contributorCount = readList(STORAGE_KEYS.contributions)
+    .filter((item) => item.giftId === giftId).length;
+
+  return { ...statusResult, reservedBy, contributorCount };
+}
+
+
+// Everything W8 needs: the owner's wishlist, its gifts with summaries, and the overall progress.
+export function getRegistryWithGifts(registryId) {
+
+  // STEP 1: owner check. Owners can see drafts, private and hidden lists (unlike getGuestWishlist)
+  const registry = getOwnedRegistry(registryId);
+
+  // STEP 2: the occasion name (same as STEP 2 of getGuestWishlist)
+  const occasion = readList(STORAGE_KEYS.occasionTypes).find(
+    (item) => item.id === registry.occasionTypeId
+  );
+
+  // STEP 3: this wishlist's gifts, each merged with its owner summary
+  const gifts = readList(STORAGE_KEYS.gifts)
+    .filter((gift) => gift.registryId === registry.id)
+    .map((gift) => ({ ...gift, ...getGiftSummary(gift.id) }));
+
+  // STEP 4: totals for "5 of 12 gifts reserved · 42%"
+  const totalUnits = gifts.reduce((total, gift) => total + gift.quantity, 0);
+  const reservedUnits = gifts.reduce((total, gift) => total + gift.reservedUnits, 0);
+  const percent = totalUnits === 0 ? 0 : Math.round((reservedUnits / totalUnits) * 100);
+
+  return {
+    registry,
+    occasionName: occasion ? occasion.name : "",
+    gifts,
+    totalUnits,
+    reservedUnits,
+    percent,
+  };
+}
+
+
 //Guest Functions
 
 // Report a public wishlist or one of its gifts (W19). Saved as "open" for the admin.
@@ -774,6 +837,9 @@ export function getGiftContributors(giftId) {
       isAnonymous: item.isAnonymous,
     }));
 }
+
+
+
 
 //Admin Functions
 
