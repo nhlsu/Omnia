@@ -45,3 +45,50 @@ export function UserIcon({ size }) {
     </Icon>
   );
 }
+export function CheckIcon({ size }) {
+  return (
+    <Icon size={size}>
+      <path d="M20 6 9 17l-5-5" />
+    </Icon>
+  );
+}
+
+export function LinkIcon({ size }) {
+  return (
+    <Icon size={size}>
+      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+    </Icon>
+  );
+}
+
+export function CopyIcon({ size }) {
+  return (
+    <Icon size={size}>
+      <rect x="8" y="8" width="14" height="14" rx="2" />
+      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+    </Icon>
+  );
+}
+
+export function ShareIcon({ size }) {
+  return (
+    <Icon size={size}>
+      <circle cx="18" cy="5" r="3" />
+      <circle cx="6" cy="12" r="3" />
+      <circle cx="18" cy="19" r="3" />
+      <path d="m8.59 13.51 6.83 3.98" />
+      <path d="m15.41 6.51-6.82 3.98" />
+    </Icon>
+  );
+}
+
+export function AlertIcon({ size }) {
+  return (
+    <Icon size={size}>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 8v4" />
+      <path d="M12 16h.01" />
+    </Icon>
+  );
+}

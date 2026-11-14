@@ -3,6 +3,7 @@ import Placeholder from "./pages/Placeholder.jsx";
 import HomePage from "./pages/owner/HomePage.jsx";
 import CreateWishlistPage from "./pages/owner/CreateWishlistPage.jsx";
 import WishlistSettingsPage from "./pages/owner/WishlistSettingsPage.jsx";
+import ShareWishlistPage from "./pages/owner/ShareWishlistPage.jsx";
 // All app screens. Screen numbers (W1–W26) match the Figma file.
 // When your page is ready, replace its <Placeholder /> with your component.
 // W14, W14b and W19 are pop-ups (not pages), and W12b is a state inside W12, so they have no route.
@@ -22,7 +23,7 @@ function App() {
       <Route path="/my-wishlists/:registryId/gifts/new" element={<Placeholder title="W6 / W7 · Add a gift" />} />
       <Route path="/my-wishlists/:registryId/gifts/:giftId/edit" element={<Placeholder title="W9 · Edit gift" />} />
       <Route path="/my-wishlists/:registryId/settings" element={<WishlistSettingsPage />} />
-      <Route path="/my-wishlists/:registryId/share" element={<Placeholder title="W11 · Share wishlist" />} />
+      <Route path="/my-wishlists/:registryId/share" element={<ShareWishlistPage />} />
       <Route path="/profile" element={<Placeholder title="W26 · Profile" />} />
 
       {/* 3 · Guest (no login) – the link matches getRegistryLink: /wishlist/:registryId */}
