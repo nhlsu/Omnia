@@ -8,6 +8,8 @@ import ProfilePage from "./pages/owner/ProfilePage.jsx";
 import AddGiftPage from "./pages/owner/AddGiftPage.jsx";
 import WishlistPage from "./pages/owner/WishlistPage.jsx";
 import EditGiftPage from "./pages/owner/EditGiftPage.jsx";
+import AdminPage from "./pages/admin/AdminPage";
+
 // All app screens. Screen numbers (W1–W26) match the Figma file.
 // When your page is ready, replace its <Placeholder /> with your component.
 // W14, W14b and W19 are pop-ups (not pages), and W12b is a state inside W12, so they have no route.
@@ -39,13 +41,7 @@ function App() {
       <Route path="/wishlist/:registryId/gift/:giftId/notes" element={<Placeholder title="W18 · Group gift notes" />} />
 
       {/* 4 · Admin */}
-      <Route path="/admin" element={<Placeholder title="W20 · Admin dashboard" />} />
-      <Route path="/admin/users" element={<Placeholder title="W21 · Users – search" />} />
-      <Route path="/admin/users/:userId" element={<Placeholder title="W22 · User details" />} />
-      <Route path="/admin/reports" element={<Placeholder title="W23 · Reports" />} />
-      <Route path="/admin/reports/:reportId" element={<Placeholder title="W23b · Report details" />} />
-      <Route path="/admin/stores" element={<Placeholder title="W24 · Supported stores" />} />
-      <Route path="/admin/occasion-types" element={<Placeholder title="W25 · Occasion types" />} />
+      <Route path="/admin" element={<AdminPage />} />
 
       {/* Any link that doesn't match the routes above */}
       <Route path="*" element={<Placeholder title="Page not found" />} />
