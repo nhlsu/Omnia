@@ -1,7 +1,7 @@
-import { useNavigate } from "react-router-dom";
-import { logoutUser } from "../../AppContext";
+import { Navigate, useNavigate } from "react-router-dom";
+import { getCurrentUser, logoutUser } from "../../AppContext";
 
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   AlertTriangle, ArrowLeft, ArrowRight, Bell, Check, ChevronRight,
   CircleCheck, ClipboardList, Gift, LayoutDashboard, MoreHorizontal,
@@ -91,6 +91,18 @@ export default function AdminPage() {
     const q = userQuery.trim().toLowerCase();
     return data.users.filter((user) => `${user.name} ${user.email}`.toLowerCase().includes(q));
   }, [data.users, userQuery]);
+
+  // Only administrators may open the admin pages. Typing /admin is not enough:
+  // logged out → login page; logged in but not an admin → owner Home.
+  // (This check comes after all the hooks above, because React hooks must always run.)
+  const currentUser = getCurrentUser();
+  if (!currentUser) {
+    return <Navigate to="/login" replace />;
+  }
+  if (currentUser.role !== "admin") {
+    return <Navigate to="/" replace />;
+  }
+
   const selectedUser = data.users.find((user) => user.id === selectedUserId);
   const visibleReports = data.reports
     .filter((report) => reportFilter === "Open" ? report.status === "Open" : report.status === "Closed")
@@ -136,17 +148,17 @@ export default function AdminPage() {
   }
 
   function submitStore(formData) {
-      let next = data;
-      if (modal.mode === "add") next = addStore(data, formData);
-      else next = updateStore(data, modal.record.id, formData);
+      const next = modal.mode === "add"
+        ? addStore(data, formData)
+        : updateStore(data, modal.record.id, formData);
       commit(next, modal.mode === "add" ? "Store added." : "Store updated.");
       setModal(null);
   }
 
   function submitOccasion(formData) {
-      let next = data;
-      if (modal.mode === "add") next = addOccasionType(data, formData);
-      else next = updateOccasionType(data, modal.record.id, formData);
+      const next = modal.mode === "add"
+        ? addOccasionType(data, formData)
+        : updateOccasionType(data, modal.record.id, formData);
       commit(next, modal.mode === "add" ? "Occasion type added." : "Occasion type updated.");
       setModal(null);
   }
@@ -368,4 +380,3 @@ function AdminModal({ modal, onClose, onSuspend, onReactivate, onReportDecision,
       </form>
     </section></div>;
 }
-
