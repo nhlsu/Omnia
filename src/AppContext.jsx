@@ -18,6 +18,7 @@ function readList(key) {
 
 function saveList(key, list) {
   localStorage.setItem(key, JSON.stringify(list));
+  window.dispatchEvent(new Event("omnia:data-changed"));
   return list;
 }
 
@@ -357,10 +358,17 @@ export const REGISTRY_STATUS = {
 };
 
 export const NOTE_MAX_LENGTH = 200;
+function requireLogin() {
+  const userId = getCurrentUserId();
+  if (!userId) {
+    throw new Error("Please log in first.");
+  }
+  return userId;
+}
 
 function buildRegistry(registryData) {
   return {
-    ownerId: getCurrentUserId(),
+    ownerId: requireLogin(),
     name: registryData.name?.trim() ?? "",
     occasionTypeId: registryData.occasionTypeId ?? null,
     date: registryData.date || null,
@@ -464,7 +472,7 @@ export function updateRegistry(registryId, changes) {
 
   const current = registries[registryIndex];
 
-  if (current.ownerId !== getCurrentUserId()) {
+  if (current.ownerId !== requireLogin()) {
     throw new Error("Only the owner can update this registry.");
   }
 
@@ -502,7 +510,7 @@ function getOwnedRegistry(registryId) {
     throw new Error("Registry not found.");
   }
 
-  if (registry.ownerId !== getCurrentUserId()) {
+  if (registry.ownerId !== requireLogin()) {
     throw new Error("Only the owner can modify this registry.");
   }
 
@@ -664,9 +672,10 @@ export function canViewRegistry(registryId, accessSource) {
   if (!registry) {
     return false;
   }
-  if (registry.ownerId === getCurrentUserId()) {
-    return true;
-  }
+  const userId = getCurrentUserId();
+ if (userId && userId === registry.ownerId) {
+  return true;
+}
   if (
     registry.visibility === VISIBILITY.LINK_ONLY &&
     accessSource !== "link"
@@ -1272,158 +1281,132 @@ export function deleteGift(giftId) {
   return { success: true, deletedGift: gift };
 }
 
-// Suspend or reactivate a user account.
-export function updateUserStatus(userId, status) {
+// Read the same records used by owners, guests, and accounts.
+export function getAdminData() {
+  return Object.fromEntries(
+    Object.entries(STORAGE_KEYS).map(([name, key]) => [name, readList(key)])
+  );
+}
+
+// Suspend or reactivate an account. Session handling belongs to Account Functions.
+export function updateUserStatus(userId, status, reason = "") {
   if (!["active", "suspended"].includes(status)) {
     throw new Error("Status must be 'active' or 'suspended'.");
   }
-
   const users = readList(STORAGE_KEYS.users);
-  const userIndex = users.findIndex((user) => user.id === userId);
-
-  if (userIndex === -1) {
-    throw new Error("User not found.");
+  const index = users.findIndex((user) => user.id === userId);
+  if (index === -1) throw new Error("User not found.");
+  if (status === "suspended" && String(users[index].role).toLowerCase() === "admin") {
+    throw new Error("Administrator accounts cannot be suspended.");
   }
-
-  users[userIndex] = {
-    ...users[userIndex],
-    status,
+  users[index] = {
+    ...users[index], status,
+    suspensionReason: status === "suspended" ? reason.trim() : "",
     updatedAt: new Date().toISOString(),
   };
-
   saveList(STORAGE_KEYS.users, users);
-  return users[userIndex];
+  return users[index];
 }
 
-// Mark a report as resolved or dismissed.
-export function updateReportStatus(reportId, status) {
+// Mark a report as resolved or dismissed, with an optional review note.
+export function updateReportStatus(reportId, status, review = {}) {
   if (!["resolved", "dismissed"].includes(status)) {
     throw new Error("Status must be 'resolved' or 'dismissed'.");
   }
-
   const reports = readList(STORAGE_KEYS.reports);
-  const reportIndex = reports.findIndex((report) => report.id === reportId);
-
-  if (reportIndex === -1) {
-    throw new Error("Report not found.");
-  }
-
-  reports[reportIndex] = {
-    ...reports[reportIndex],
-    status,
-    updatedAt: new Date().toISOString(),
+  const index = reports.findIndex((report) => report.id === reportId);
+  if (index === -1) throw new Error("Report not found.");
+  reports[index] = {
+    ...reports[index], status,
+    action: review.action || "none",
+    decisionNote: review.note?.trim() || "",
+    reviewedAt: new Date().toISOString(),
   };
-
   saveList(STORAGE_KEYS.reports, reports);
-  return reports[reportIndex];
+  return reports[index];
 }
 
-// Hide or restore a registry.
-export function setRegistryHidden(registryId, isHidden) {
-  if (typeof isHidden !== "boolean") {
-    throw new Error("isHidden must be true or false.");
-  }
-
+// Hide or restore a registry without changing its privacy setting.
+export function setRegistryHidden(registryId, isHidden, reason = "") {
+  if (typeof isHidden !== "boolean") throw new Error("isHidden must be true or false.");
   const registries = readList(STORAGE_KEYS.registries);
-  const registryIndex = registries.findIndex(
-    (registry) => registry.id === registryId
-  );
-
-  if (registryIndex === -1) {
-    throw new Error("Registry not found.");
-  }
-
-  registries[registryIndex] = {
-    ...registries[registryIndex],
-    isHidden,
+  const index = registries.findIndex((registry) => registry.id === registryId);
+  if (index === -1) throw new Error("Registry not found.");
+  registries[index] = {
+    ...registries[index], isHidden,
+    hiddenReason: isHidden ? reason.trim() : "",
     updatedAt: new Date().toISOString(),
   };
-
   saveList(STORAGE_KEYS.registries, registries);
-  return registries[registryIndex];
+  return registries[index];
 }
 
-// Add a supported store.
+function cleanStoreDomain(value) {
+  if (typeof value !== "string" || !value.trim()) {
+    throw new Error("Store domain is required.");
+  }
+  const domain = value.trim().toLowerCase()
+    .replace(/^https?:\/\//, "").replace(/\/$/, "").replace(/^www\./, "");
+  const labels = domain.split(".");
+  if (domain.length > 253 || labels.length < 2 || labels.some(
+    (label) => !/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label)
+  )) throw new Error("Enter a valid domain, such as example.com.");
+  return domain;
+}
+
+function validateStore(data, stores, excludeId) {
+  const name = typeof data.name === "string" ? data.name.trim() : "";
+  if (!name) throw new Error("Store name is required.");
+  const domain = cleanStoreDomain(data.domain);
+  if (typeof data.isActive !== "boolean") throw new Error("isActive must be true or false.");
+  if (stores.some((item) => item.id !== excludeId && (
+    item.name?.trim().toLowerCase() === name.toLowerCase() ||
+    (item.domain && cleanStoreDomain(item.domain) === domain)
+  ))) throw new Error("This store name or domain already exists.");
+  return { name, domain, isActive: data.isActive };
+}
+
+// Add a supported store, including the domain needed by product-link lookup.
 export function addStore(storeData) {
-  if (!storeData || !storeData.name) {
-    throw new Error("Store name is required.");
-  }
-
   const stores = readList(STORAGE_KEYS.stores);
-  const alreadyExists = stores.some(
-    (store) => store.name.toLowerCase() === storeData.name.toLowerCase()
-  );
-
-  if (alreadyExists) {
-    throw new Error("This store already exists.");
-  }
-
-  return addRecord(STORAGE_KEYS.stores, {
-    ...storeData,
-    isActive: true,
-  });
+  const fields = validateStore({ ...storeData, isActive: true }, stores);
+  return addRecord(STORAGE_KEYS.stores, fields);
 }
 
-// Update a store or deactivate it by setting isActive to false.
 export function updateStore(storeId, changes) {
   const stores = readList(STORAGE_KEYS.stores);
-  const storeIndex = stores.findIndex((store) => store.id === storeId);
-
-  if (storeIndex === -1) {
-    throw new Error("Store not found.");
-  }
-
-  stores[storeIndex] = {
-    ...stores[storeIndex],
-    ...changes,
-    id: storeId,
-    updatedAt: new Date().toISOString(),
-  };
-
+  const index = stores.findIndex((store) => store.id === storeId);
+  if (index === -1) throw new Error("Store not found.");
+  const fields = validateStore({ ...stores[index], ...changes }, stores, storeId);
+  stores[index] = { ...stores[index], ...fields, updatedAt: new Date().toISOString() };
   saveList(STORAGE_KEYS.stores, stores);
-  return stores[storeIndex];
+  return stores[index];
 }
 
-// Add an occasion type.
+function validateOccasion(data, occasions, excludeId) {
+  const name = typeof data.name === "string" ? data.name.trim() : "";
+  if (name.length < 2 || name.length > 30) {
+    throw new Error("Occasion name must be 2–30 characters.");
+  }
+  if (typeof data.isActive !== "boolean") throw new Error("isActive must be true or false.");
+  if (occasions.some((item) => item.id !== excludeId &&
+    item.name?.trim().toLowerCase() === name.toLowerCase()
+  )) throw new Error("This occasion type already exists.");
+  return { name, isActive: data.isActive };
+}
+
 export function addOccasionType(occasionData) {
-  if (!occasionData || !occasionData.name) {
-    throw new Error("Occasion type name is required.");
-  }
-
-  const occasionTypes = readList(STORAGE_KEYS.occasionTypes);
-  const alreadyExists = occasionTypes.some(
-    (occasion) =>
-      occasion.name.toLowerCase() === occasionData.name.toLowerCase()
-  );
-
-  if (alreadyExists) {
-    throw new Error("This occasion type already exists.");
-  }
-
-  return addRecord(STORAGE_KEYS.occasionTypes, {
-    ...occasionData,
-    isActive: true,
-  });
+  const occasions = readList(STORAGE_KEYS.occasionTypes);
+  const fields = validateOccasion({ ...occasionData, isActive: true }, occasions);
+  return addRecord(STORAGE_KEYS.occasionTypes, fields);
 }
 
-// Update an occasion type or deactivate it by setting isActive to false.
 export function updateOccasionType(occasionTypeId, changes) {
-  const occasionTypes = readList(STORAGE_KEYS.occasionTypes);
-  const occasionIndex = occasionTypes.findIndex(
-    (occasion) => occasion.id === occasionTypeId
-  );
-
-  if (occasionIndex === -1) {
-    throw new Error("Occasion type not found.");
-  }
-
-  occasionTypes[occasionIndex] = {
-    ...occasionTypes[occasionIndex],
-    ...changes,
-    id: occasionTypeId,
-    updatedAt: new Date().toISOString(),
-  };
-
-  saveList(STORAGE_KEYS.occasionTypes, occasionTypes);
-  return occasionTypes[occasionIndex];
+  const occasions = readList(STORAGE_KEYS.occasionTypes);
+  const index = occasions.findIndex((occasion) => occasion.id === occasionTypeId);
+  if (index === -1) throw new Error("Occasion type not found.");
+  const fields = validateOccasion({ ...occasions[index], ...changes }, occasions, occasionTypeId);
+  occasions[index] = { ...occasions[index], ...fields, updatedAt: new Date().toISOString() };
+  saveList(STORAGE_KEYS.occasionTypes, occasions);
+  return occasions[index];
 }
