@@ -1,0 +1,167 @@
+
+.omnia-signup-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  padding: 42px 22px 40px;
+  box-sizing: border-box;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
+  text-align: left;
+}
+
+.omnia-signup-page * {
+  box-sizing: border-box;
+}
+
+.omnia-signup-container {
+  width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
+}
+
+/* Logo */
+.omnia-signup-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  color: var(--color-primary);
+  font-size: 21px;
+  font-weight: 700;
+}
+
+/* Page heading */
+.omnia-signup-title {
+  margin: 0 0 20px;
+  color: var(--color-primary);
+  font-size: 29px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+
+.omnia-signup-subtitle {
+  margin: 0 0 24px;
+  color: var(--color-text-muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Form fields */
+.omnia-signup-field {
+  margin-bottom: 20px;
+}
+
+.omnia-signup-field label {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.omnia-signup-field input {
+  display: block;
+  width: 100%;
+  min-height: 49px;
+  padding: 12px 15px;
+  border: 1px solid var(--color-border);
+  border-radius: 11px;
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 14px;
+}
+
+.omnia-signup-field input:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+.omnia-signup-field input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.omnia-signup-field input[aria-invalid="true"] {
+  border: 2px solid var(--color-danger);
+}
+
+.omnia-signup-help {
+  margin: 8px 0 0;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.omnia-signup-error {
+  margin: 7px 0 0;
+  color: var(--color-danger);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.omnia-signup-message {
+  color: var(--color-success);
+  font-size: 13px;
+}
+
+/* Buttons */
+.omnia-signup-submit {
+  width: 100%;
+  min-height: 50px;
+  margin-top: 4px;
+  padding: 12px;
+  border: none;
+  border-radius: 11px;
+  background: var(--color-primary);
+  color: white;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.omnia-signup-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.omnia-signup-login {
+  display: block;
+  width: 100%;
+  margin-top: 22px;
+  padding: 8px;
+  border: none;
+  background: transparent;
+  color: var(--color-primary);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+
+/* Override Vite starter layout on this screen */
+body:has(.omnia-signup-page) {
+  display: block;
+  margin: 0;
+  min-width: 0;
+}
+
+#root:has(.omnia-signup-page) {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+@media (max-width: 380px) {
+  .omnia-signup-page {
+    padding: 30px 16px;
+  }
+
+  .omnia-signup-title {
+    font-size: 26px;
+  }
+}
