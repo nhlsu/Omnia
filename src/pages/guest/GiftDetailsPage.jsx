@@ -50,7 +50,7 @@ function GiftDetailsPage() {
   const canReserve = availableUnits > 0 && !isGroupGift;
 
   // ② Group gift: needs a price and no normal reservations
-  const canUseGroupGift = hasPrice && gift.reservedUnits === 0;
+  const canUseGroupGift = hasPrice && gift.isGroupGift && gift.reservedUnits === 0;
   let groupLabel = "Start a group gift";
   if (gift.status === GIFT_STATUS.GROUP_IN_PROGRESS) groupLabel = "Join group gift";
   if (gift.status === GIFT_STATUS.FULLY_FUNDED) groupLabel = "View group gift";

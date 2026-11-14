@@ -1027,6 +1027,11 @@ export function addContribution(contributionData) {
   if (!gift.price) {
     throw new Error("Group gifts are only for gifts with a price.");
   }
+  
+  if (!gift.isGroupGift) {
+    throw new Error("This gift isn't open for group gifting.");
+  }
+
 
   getOpenRegistry(gift.registryId);
 
