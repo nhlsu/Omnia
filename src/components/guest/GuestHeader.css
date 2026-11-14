@@ -1,0 +1,32 @@
+.guest-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  padding: 0 12px 0 20px;
+}
+
+.guest-header__menu {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 10px;
+  background: none;
+  color: var(--color-text-muted, #6e667a);
+  cursor: pointer;
+}
+
+.guest-header__menu:hover {
+  background: var(--color-primary-lighter, #eee4f6);
+}
+.guest-header__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-primary, #5f46ad);
+}

@@ -1,0 +1,167 @@
+/* Shared styles for all guest screens: page frame, back link and buttons. */
+.guest-page {
+  min-height: 100vh;
+  background: var(--color-bg, #f6eeef);
+  color: var(--color-text, #221c32);
+  font-family: var(--font-family, "Inter", system-ui, sans-serif);
+  text-align: left;
+}
+
+.guest-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-primary, #5f46ad);
+  text-decoration: none;
+}
+
+.guest-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 46px;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.guest-btn--primary {
+  border: none;
+  background: var(--color-primary, #5f46ad);
+  color: #ffffff;
+}
+
+.guest-btn--outline {
+  border: 1px solid var(--color-track, #e0d7ea);
+  background: var(--color-surface, #ffffff);
+  color: var(--color-primary, #5f46ad);
+}
+
+.guest-btn:disabled {
+  background: var(--color-track, #e0d7ea);
+  color: var(--color-text-muted, #6e667a);
+  border: none;
+  cursor: not-allowed;
+}
+
+.guest-link {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-primary, #5f46ad);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.guest-btn--danger {
+  border: none;
+  background: var(--color-danger, #bf382b);
+  color: #ffffff;
+}
+
+/* Small dark message at the bottom of the screen (e.g. "Reservation cancelled") */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: var(--color-text-dark, #292138);
+  color: #ffffff;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+
+/* Shared form fields (W17, W18, W19) */
+.guest-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.guest-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text, #221c32);
+}
+
+.guest-input {
+  height: 46px;
+  padding: 0 16px;
+  box-sizing: border-box;
+  border: 1px solid var(--color-track, #e0d7ea);
+  border-radius: 10px;
+  background: var(--color-surface, #ffffff);
+  font: inherit;
+  font-size: 15px;
+  color: var(--color-text, #221c32);
+}
+
+.guest-input:focus {
+  outline: 2px solid var(--color-primary, #5f46ad);
+  outline-offset: 1px;
+}
+
+.guest-input--error {
+  border-color: var(--color-danger, #bf382b);
+}
+
+.guest-error {
+  margin: 0;
+  font-size: 13px;
+  color: var(--color-danger, #bf382b);
+}
+
+.guest-hint {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-text-muted, #6e667a);
+}
+
+.guest-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--color-text, #221c32);
+  cursor: pointer;
+}
+
+.guest-check input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--color-primary, #5f46ad);
+}
+
+.guest-alert {
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--color-danger-bg, #fceae7);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-danger, #bf382b);
+}

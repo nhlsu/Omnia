@@ -14,6 +14,12 @@ import AddGiftPage from "./pages/owner/AddGiftPage.jsx";
 import WishlistPage from "./pages/owner/WishlistPage.jsx";
 import EditGiftPage from "./pages/owner/EditGiftPage.jsx";
 import AdminPage from "./pages/admin/AdminPage";
+import GuestWishlistPage from "./pages/guest/GuestWishlistPage.jsx";
+import GiftDetailsPage from "./pages/guest/GiftDetailsPage.jsx";
+import ReservationConfirmedPage from "./pages/guest/ReservationConfirmedPage.jsx";
+import ManageReservationPage from "./pages/guest/ManageReservationPage.jsx";
+import GroupGiftPage from "./pages/guest/GroupGiftPage.jsx";
+import GroupGiftNotesPage from "./pages/guest/GroupGiftNotesPage.jsx";
 
 
 // All app screens. Screen numbers (W1–W26) match the Figma file.
@@ -82,12 +88,12 @@ function App() {
       <Route path="/profile" element={<ProfilePage />} />
 
       {/* 3 · Guest (no login) – the link matches getRegistryLink: /wishlist/:registryId */}
-      <Route path="/wishlist/:registryId" element={<Placeholder title="W12 · Wishlist – guest view" />} />
-      <Route path="/wishlist/:registryId/gift/:giftId" element={<Placeholder title="W13 · Gift details" />} />
-      <Route path="/wishlist/:registryId/reserved" element={<Placeholder title="W15 · Reservation confirmed" />} />
-      <Route path="/wishlist/:registryId/manage" element={<Placeholder title="W16 · Manage / cancel reservation" />} />
-      <Route path="/wishlist/:registryId/gift/:giftId/group" element={<Placeholder title="W17 · Group gift" />} />
-      <Route path="/wishlist/:registryId/gift/:giftId/notes" element={<Placeholder title="W18 · Group gift notes" />} />
+      <Route path="/wishlist/:registryId" element={<GuestWishlistPage />} />
+      <Route path="/wishlist/:registryId/gift/:giftId" element={<GiftDetailsPage />} />
+      <Route path="/wishlist/:registryId/reserved" element={<ReservationConfirmedPage />} />
+          <Route path="/wishlist/:registryId/manage" element={<ManageReservationPage />} />
+      <Route path="/wishlist/:registryId/gift/:giftId/group" element={<GroupGiftPage />} />
+      <Route path="/wishlist/:registryId/gift/:giftId/notes" element={<GroupGiftNotesPage />} />
 
       {/* 4 · Admin */}
       <Route path="/admin" element={<AdminPage />} />

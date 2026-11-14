@@ -1,0 +1,96 @@
+/* Gift card from Figma W12: 14px padding, 14px corners, 56px image tile. */
+.gift-card {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  background: var(--color-surface, #ffffff);
+  border-radius: 14px;
+}
+
+.gift-card__image {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  background: var(--color-primary-lighter, #eee4f6);
+  color: var(--color-primary, #5f46ad);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.gift-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gift-card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gift-card__name {
+  margin: 0;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+  letter-spacing: normal;
+  color: var(--color-text, #221c32);
+}
+
+.gift-card__price {
+  margin: 0;
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 700;
+  color: var(--color-primary, #5f46ad);
+}
+
+.gift-card__meta {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-text-muted, #6e667a);
+}
+
+.gift-card__pledged {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--color-text, #221c32);
+}
+
+.gift-card__progress {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--color-track, #e0d7ea);
+  overflow: hidden;
+}
+
+.gift-card__progress-fill {
+  height: 100%;
+  background: var(--color-primary, #5f46ad);
+}
+
+.gift-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.gift-card__action {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary, #5f46ad);
+  text-decoration: none;
+}
+
+.gift-card__action:hover {
+  text-decoration: underline;
+}

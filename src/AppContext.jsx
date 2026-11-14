@@ -1051,6 +1051,11 @@ export function addContribution(contributionData) {
   if (!gift.price) {
     throw new Error("Group gifts are only for gifts with a price.");
   }
+  
+  if (!gift.isGroupGift) {
+    throw new Error("This gift isn't open for group gifting.");
+  }
+
 
   getOpenRegistry(gift.registryId);
 
@@ -1186,7 +1191,6 @@ export function getGiftStatus(giftId) {
   };
 }
 
-
 // Everything W12 needs: the wishlist, its occasion name, and its gifts with their status (G1, G3).
 export function getGuestWishlist(registryId) {
 
@@ -1203,14 +1207,17 @@ export function getGuestWishlist(registryId) {
     .filter((gift) => gift.registryId === registry.id)
     .map((gift) => ({ ...gift, ...getGiftStatus(gift.id) }));
 
+  // STEP 4: the owner's first name, for "Elham's birthday" and "A note from Elham"
+  const owner = readList(STORAGE_KEYS.users).find((user) => user.id === registry.ownerId);
+  const ownerName = owner?.name ? owner.name.split(" ")[0] : "";
+
   return {
     registry,
     occasionName: occasion ? occasion.name : "",
+    ownerName,
     gifts,
   };
 }
-
-
 
 // Notes in a group gift thread, oldest first (G7). Only contributors to this gift can read them.
 export function getGiftNotes(giftId, contributionId) {
@@ -1253,6 +1260,21 @@ export function getGiftContributors(giftId) {
       amount: item.amount,
       isAnonymous: item.isAnonymous,
     }));
+}
+
+// This browser remembers the guest's pledge for each gift, like a ticket: { giftId: contributionId }.
+// W17 saves it after pledging; W18 uses it to read and post notes (only contributors may).
+const MY_CONTRIBUTIONS_KEY = "omnia_my_contributions";
+
+export function rememberMyContribution(giftId, contributionId) {
+  const saved = JSON.parse(localStorage.getItem(MY_CONTRIBUTIONS_KEY) || "{}");
+  saved[giftId] = contributionId;
+  localStorage.setItem(MY_CONTRIBUTIONS_KEY, JSON.stringify(saved));
+}
+
+export function getMyContributionId(giftId) {
+  const saved = JSON.parse(localStorage.getItem(MY_CONTRIBUTIONS_KEY) || "{}");
+  return saved[giftId] || null;
 }
 
 
