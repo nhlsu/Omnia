@@ -1,5 +1,4 @@
 
-
 .om-app,.om-app * {
   box-sizing: border-box;
 }
@@ -1232,7 +1231,7 @@
   box-shadow: var(--shadow);
   font-size: 11px;
   white-space: nowrap;
-  animation: om-pop .2s ease-out;
+  animation: om-toast-pop .2s ease-out;
 }
 
 .om-toast span {
@@ -1330,7 +1329,7 @@
   }
 
   .om-mobile-brand .om-brand em {
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .om-breadcrumb {
@@ -1369,17 +1368,17 @@
   }
 
   .om-page-heading p {
-    font-size: 11px;
+    font-size: 12px;
     line-height: 1.5;
     max-width: 290px;
   }
 
   .om-eyebrow {
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .om-updated {
-    font-size: 9px;
+    font-size: 12px;
     margin-top: 7px;
     white-space: nowrap;
   }
@@ -1396,7 +1395,7 @@
   }
 
   .om-stat-top {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .om-stat-icon {
@@ -1410,7 +1409,7 @@
   }
 
   .om-stat-foot {
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .om-panel {
@@ -1424,7 +1423,7 @@
   }
 
   .om-panel-heading p {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .om-report-preview,.om-report-row {
@@ -1438,15 +1437,15 @@
   }
 
   .om-report-preview-copy b {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .om-report-preview-copy small {
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .om-status {
-    font-size: 8px;
+    font-size: 12px;
     padding: 4px 7px;
   }
 
@@ -1496,7 +1495,7 @@
   }
 
   .om-mobile-nav button small {
-    font-size: 8px;
+    font-size: 12px;
     font-weight: 600;
   }
 
@@ -1527,11 +1526,11 @@
   }
 
   .om-search input {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .om-result-count {
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .om-user-row {
@@ -1545,11 +1544,11 @@
   }
 
   .om-user-main b {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .om-user-main small {
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .om-user-meta {
@@ -1557,11 +1556,11 @@
   }
 
   .om-user-meta b {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .om-user-meta small {
-    font-size: 8px;
+    font-size: 12px;
   }
 
   .om-user-row .om-status {
@@ -1585,7 +1584,7 @@
   }
 
   .om-user-profile p {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .om-user-profile .om-avatar {
@@ -1605,7 +1604,7 @@
 
   .om-tabs button {
     padding: 13px 9px;
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .om-report-list {
@@ -1621,7 +1620,7 @@
   }
 
   .om-report-meta .om-detail {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .om-settings-intro {
@@ -1641,7 +1640,7 @@
 
   .om-settings-intro .om-button {
     padding: 9px;
-    font-size: 9px;
+    font-size: 12px;
     white-space: nowrap;
   }
 
@@ -1660,15 +1659,15 @@
   }
 
   .om-setting-info b {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .om-setting-info small {
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .om-small-link,.om-kebab {
-    font-size: 9px;
+    font-size: 12px;
     padding: 5px 4px;
   }
 
@@ -1702,7 +1701,7 @@
   }
 
   .om-modal-actions .om-button {
-    font-size: 10px;
+    font-size: 12px;
     padding: 10px 12px;
   }
 
@@ -1725,7 +1724,7 @@
   }
 
   .om-small-link,.om-kebab {
-    font-size: 8px;
+    font-size: 12px;
   }
 
   .om-setting-info {
@@ -1737,7 +1736,7 @@
   }
 
   .om-report-row .om-status {
-    font-size: 7px;
+    font-size: 12px;
   }
 
   .om-user-meta {
@@ -1745,7 +1744,7 @@
   }
 
   .om-user-row .om-status {
-    font-size: 7px;
+    font-size: 12px;
   }
 
 }
@@ -1812,3 +1811,94 @@
 .om-app .om-report-meta .om-detail>span,.om-app .om-page-heading p,.om-app .om-admin-label small {
   color: var(--color-text-muted, #6d667a);
 }
+
+/* Modal scrolling and touch controls */
+.om-modal {
+  max-height: calc(100dvh - 36px);
+  overflow-y: auto;
+}
+
+.om-app .om-button,
+.om-app .om-small-link,
+.om-app .om-kebab,
+.om-app .om-icon-button,
+.om-app .om-modal-close,
+.om-app .om-tabs button,
+.om-app .om-text-button,
+.om-app .om-back-button,
+.om-app .om-mobile-nav button {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.om-settings-intro .om-button {
+  gap: 6px;
+}
+
+/* Preserve horizontal centering during toast animation */
+@keyframes om-toast-pop {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 7px) scale(.985);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+@media (max-width: 700px) {
+  .om-app .om-field input,
+  .om-app .om-field textarea,
+  .om-app .om-search input {
+    font-size: 16px;
+  }
+
+  .om-app .om-search {
+    height: auto;
+    min-height: 44px;
+    min-width: 0;
+  }
+
+  .om-app .om-setting-row {
+    flex-wrap: wrap;
+    padding-block: 10px;
+  }
+
+  .om-app .om-setting-info {
+    overflow-wrap: anywhere;
+  }
+
+  .om-app .om-settings-intro,
+  .om-app .om-page-heading,
+  .om-app .om-user-profile {
+    flex-wrap: wrap;
+  }
+
+  .om-app .om-user-main small {
+    overflow-wrap: anywhere;
+  }
+
+  .om-app .om-mobile-nav {
+    height: calc(67px + env(safe-area-inset-bottom));
+  }
+
+  .om-app .om-main {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+
+  .om-app .om-toast {
+    bottom: calc(80px + env(safe-area-inset-bottom));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .om-app *,
+  .om-app *::before,
+  .om-app *::after {
+    animation: none;
+    transition: none;
+  }
+}
+
+
