@@ -1,0 +1,63 @@
+/* 72px light-purple circle with the user icon, centred */
+.profile__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.profile__name {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.profile__email {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* White card with two "label … value" rows */
+.profile-card {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 4px 16px;
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.profile-card__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  font-size: 13px;
+}
+
+.profile-card__row dt {
+  color: var(--color-text-muted);
+}
+
+.profile-card__row dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+/* White outlined "Log out" button */
+.profile__logout {
+  padding: 13px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
