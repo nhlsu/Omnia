@@ -1,17 +1,66 @@
-import { Routes, Route } from "react-router-dom";
+
+import { Routes, Route, useNavigate } from "react-router-dom";
+import Login from "./pages/Account/Login.jsx";
+import SignUp from "./pages/Account/SignUp.jsx";
+import ForgotPassword from "./pages/Account/ForgotPassword.jsx";
+import ResetPassword from "./pages/Account/ResetPassword.jsx";
 import Placeholder from "./pages/Placeholder.jsx";
+
 
 // All app screens. Screen numbers (W1–W26) match the Figma file.
 // When your page is ready, replace its <Placeholder /> with your component.
 // W14, W14b and W19 are pop-ups (not pages), and W12b is a state inside W12, so they have no route.
+
 function App() {
+  const navigate = useNavigate();
+
+  function handleAuthSuccess(user) {
+    if (user.role === "admin") {
+      navigate("/admin", { replace: true });
+    } else {
+      navigate("/", { replace: true });
+    }
+  }
+
   return (
     <Routes>
+
       {/* 1 · Account */}
-      <Route path="/signup" element={<Placeholder title="W1 · Sign up" />} />
-      <Route path="/login" element={<Placeholder title="W2 · Log in" />} />
-      <Route path="/forgot-password" element={<Placeholder title="W3 · Forgot password" />} />
-      <Route path="/reset-password" element={<Placeholder title="W3b · Set new password" />} />
+      
+      <Route path="/signup" element={ 
+        <SignUp
+      onRegistered={handleAuthSuccess}
+      onLogin={() => navigate("/login")}
+    />
+  }
+/>
+
+      <Route path="/login" element={
+        <Login
+      onLoggedIn={handleAuthSuccess}
+      onForgotPassword={() => navigate("/forgot-password")}
+      onCreateAccount={() => navigate("/signup")}
+    />
+  }
+/>
+
+      <Route path="/forgot-password" element={
+        <ForgotPassword
+      onBack={() => navigate("/login")}
+      onOpenReset={() => navigate("/reset-password")}
+    />
+  }
+/>
+
+      <Route path="/reset-password" element={
+        <ResetPassword
+      onBack={() => navigate("/forgot-password")}
+      onLogin={() => navigate("/login")}
+      onRequestNewLink={() => navigate("/forgot-password")}
+    />
+  }
+/>
+
 
       {/* 2 · Registry Owner */}
       <Route path="/" element={<Placeholder title="W4 · Home" />} />

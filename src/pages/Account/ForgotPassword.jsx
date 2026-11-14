@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { requestPasswordReset } from '../../AppContext.jsx';
 import './ForgotPassword.css';
 
-export default function ForgotPassword({ onBack }) {
+export default function ForgotPassword({ onBack, onOpenReset }) {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -137,6 +137,18 @@ export default function ForgotPassword({ onBack }) {
             </div>
           </div>
         )}
+
+
+{success && (
+  <button
+    type="button"
+    className="omnia-forgot-demo-link"
+    onClick={onOpenReset}
+  >
+    Open reset page (demo)
+  </button>
+)}
+
       </div>
     </main>
   );
