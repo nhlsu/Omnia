@@ -1,0 +1,87 @@
+/* Red "🗑 Remove gift" text link under Save changes (W9) */
+.edit__remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  align-self: center;
+  padding: 8px;
+  border: none;
+  background: none;
+  color: var(--color-danger);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* W9b: dark overlay covering the page, white card in the middle */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background: rgba(34, 28, 50, 0.45);
+}
+
+.modal__card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 334px;
+  padding: 20px;
+  border-radius: 20px;
+  background: var(--color-surface);
+  text-align: left;
+}
+
+/* 72px light-purple circle with the bin icon */
+.modal__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.modal__title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.modal__text {
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+/* Red "Remove gift" and white outlined "Keep gift" */
+.modal__danger,
+.modal__cancel {
+  padding: 13px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modal__danger {
+  border: none;
+  background: var(--color-danger);
+  color: #ffffff;
+}
+
+.modal__cancel {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-primary);
+}
