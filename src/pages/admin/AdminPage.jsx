@@ -1,3 +1,6 @@
+import { useNavigate } from "react-router-dom";
+import { logoutUser } from "../../AppContext";
+
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   AlertTriangle, ArrowLeft, ArrowRight, Bell, Check, ChevronRight,
@@ -24,6 +27,15 @@ function Icon({ icon: IconComponent }) { return <span className="om-icon" aria-h
 function formatDate(value) { if (!value || Number.isNaN(Date.parse(value))) return "—"; return new Date(value).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" }); }
 
 export default function AdminPage() {
+
+  const navigate = useNavigate();
+  const [showAccountMenu, setShowAccountMenu] = useState(false);
+  function handleLogout() {
+    logoutUser();
+    navigate("/login", { replace: true });
+}
+
+
   const [data, setData] = useState(loadAdminData);
   const [page, setPage] = useState("dashboard");
   const [userQuery, setUserQuery] = useState("");
@@ -155,13 +167,45 @@ export default function AdminPage() {
         <nav className="om-side-nav" aria-label="Admin navigation">
           {navItems.map((item) => <button key={item.id} className={`om-nav-item ${page === item.id ? "active" : ""}`} onClick={() => navTo(item.id)}><Icon icon={item.icon} /><span>{item.label}</span>{item.id === "reports" && openReports > 0 && <b className="om-nav-count">{openReports}</b>}</button>)}
         </nav>
-        <div className="om-sidebar-foot"><span className="om-avatar small">A</span><span><b>Omnia Admin</b><small>Administrator</small></span><span className="om-more"><MoreHorizontal size={18} /></span></div>
+        <div className="om-sidebar-foot">
+  <span className="om-avatar small">A</span>
+
+  <span>
+    <b>Omnia Admin</b>
+    <small>Administrator</small>
+  </span>
+
+  <div className="om-account-menu">
+    <button
+      type="button"
+      className="om-more"
+      aria-label="Account menu"
+      aria-expanded={showAccountMenu}
+      onClick={() => setShowAccountMenu(!showAccountMenu)}
+    >
+      <MoreHorizontal size={18} />
+    </button>
+
+    {showAccountMenu && (
+      <button
+        type="button"
+        className="om-logout-button"
+        onClick={handleLogout}
+      >
+        Log out
+      </button>
+    )}
+  </div>
+</div>
+     
       </aside>
 
       <main className="om-main">
         <header className="om-topbar">
           <div className="om-mobile-brand"><Brand /></div>
-          <div className="om-breadcrumb">Admin <span>/</span> <b>{page === "settings" ? "Settings" : selectedUser ? "User details" : selectedReport ? "Report details" : page[0].toUpperCase() + page.slice(1)}</b></div>
+          <div className="om-breadcrumb">
+            <button  type="button" className="om-text-button" onClick={() => navTo("dashboard")}>Admin</button>
+            <span>/</span> <b>{page === "settings" ? "Settings" : selectedUser ? "User details" : selectedReport ? "Report details" : page[0].toUpperCase() + page.slice(1)}</b></div>
           <div className="om-top-actions"><button className="om-icon-button" aria-label="Notifications" onClick={() => { setReportFilter("Open"); setSelectedReportId(null); setPage("reports"); }}><Bell size={17} strokeWidth={1.8} />{openReports > 0 && <i />}</button><span className="om-avatar">A</span><div className="om-admin-label"><b>Omnia Admin</b><small>Admin account</small></div></div>
         </header>
 

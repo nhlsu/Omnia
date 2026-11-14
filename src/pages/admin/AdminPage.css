@@ -1901,4 +1901,33 @@
   }
 }
 
+.om-account-menu {
+  position: relative;
+  margin-left: auto;
+}
 
+.om-account-menu .om-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+
+.om-logout-button {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  min-width: 120px;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  color: var(--color-danger);
+  white-space: nowrap;
+  z-index: 6;
+}
