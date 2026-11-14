@@ -30,6 +30,7 @@ function GiftForm({
     notes: initial.notes ?? "",
     productUrl: initial.productUrl ?? "",
     imageUrl: initial.imageUrl ?? null,
+    isGroupGift: initial.isGroupGift ?? false,
   });
   const [error, setError] = useState("");
 
@@ -46,6 +47,10 @@ function GiftForm({
         Math.max(minQuantity, form.quantity + step)
       ),
     });
+  }
+
+  function handleGroupGift(event) {
+    setForm({ ...form, isGroupGift: event.target.checked });
   }
 
   function handlePhoto(event) {
@@ -162,6 +167,25 @@ function GiftForm({
       </div>
 
       {quantityNote}
+
+      <label className="toggle">
+        <span className="toggle__text">
+          <span className="field__label">Group gift</span>
+          <span className="toggle__hint">
+            {form.price === "" || form.price === null
+              ? "Add a price to let guests chip in together."
+              : "Let guests chip in together for this gift."}
+          </span>
+        </span>
+        <input
+          type="checkbox"
+          role="switch"
+          className="toggle__input"
+          checked={form.isGroupGift}
+          onChange={handleGroupGift}
+          disabled={form.price === "" || form.price === null}
+        />
+      </label>
 
       {variant === "auto" && (
         <label className="field">
