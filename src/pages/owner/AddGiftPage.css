@@ -1,0 +1,146 @@
+/* Reuse the step bar and field label styles from W5 */
+@import "./CreateWishlistPage.css";
+
+.gift__title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.gift__subtitle {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* Two tabs on a light-purple track; the selected tab is white */
+.tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 12px;
+  background: var(--owner-tint);
+}
+
+.tabs__tab {
+  flex: 1;
+  padding: 9px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tabs__tab--active {
+  background: var(--color-surface);
+  color: var(--color-primary);
+}
+
+/* Link box: purple border, input on the left, small "Fetch details" button on the right */
+.link-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 8px 8px 14px;
+  border: 1.5px solid var(--color-primary);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.link-input__field {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  color: var(--color-text);
+  outline: none;
+}
+
+.link-input__button {
+  padding: 8px 10px;
+  border: none;
+  border-radius: 8px;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.link-input__button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* "Fetching…" box with a progress bar that fills during the 1.2s wait */
+.fetching {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--owner-tint);
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.fetching__track {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-primary-soft);
+  overflow: hidden;
+}
+
+.fetching__fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--color-primary);
+  animation: fetching-fill 1.2s ease-out forwards;
+}
+
+@keyframes fetching-fill {
+  from {
+    width: 10%;
+  }
+  to {
+    width: 90%;
+  }
+}
+
+.gift__found {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-success);
+}
+
+.gift__error {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-danger);
+}
+
+.gift__hint {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+/* White outlined "Continue" button; greyed out until details are fetched */
+.gift__continue {
+  padding: 13px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.gift__continue:disabled {
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}
