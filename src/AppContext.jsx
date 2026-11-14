@@ -1180,7 +1180,7 @@ export function getGuestWishlist(registryId) {
 
   // STEP 4: the owner's first name, for "Elham's birthday" and "A note from Elham"
   const owner = readList(STORAGE_KEYS.users).find((user) => user.id === registry.ownerId);
-  const ownerName = owner?.fullName ? owner.fullName.split(" ")[0] : "";
+  const ownerName = owner?.name ? owner.name.split(" ")[0] : "";
 
   return {
     registry,
