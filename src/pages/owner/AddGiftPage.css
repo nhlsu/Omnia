@@ -144,3 +144,32 @@
   color: var(--color-text-muted);
   cursor: not-allowed;
 }
+/* W7 green banner / W7b yellow banner at the top of the form */
+.gift-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  color: var(--color-text);
+}
+
+.gift-banner--success {
+  background: var(--owner-success-bg);
+}
+
+.gift-banner--success svg {
+  color: var(--color-success);
+}
+
+.gift-banner--warning {
+  background: var(--owner-warning-bg);
+}
+.gift-banner--warning svg {
+  color: var(--color-warning);
+}
+.gift-banner__title {
+  font-weight: 600;
+  color: var(--color-warning);
+}

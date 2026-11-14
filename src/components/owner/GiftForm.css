@@ -1,0 +1,99 @@
+/* The whole form: 16px between blocks, like the other owner pages */
+.gift-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Image box (W7, W9): light purple, 16px corners, icon or photo in the middle */
+.gift-form__image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 120px;
+  border-radius: 16px;
+  background: var(--owner-tint);
+  color: var(--color-primary);
+  overflow: hidden;
+}
+
+.gift-form__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* "Add a gift photo (optional)" (W7b): white outlined, purple text, camera icon */
+.gift-form__photo-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* "Desired quantity" label on the left, stepper on the right */
+.gift-form__quantity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* − 1 + stepper: white, light border, 12px corners */
+.stepper {
+  display: flex;
+  align-items: center;
+  height: 46px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.stepper button {
+  width: 40px;
+  height: 100%;
+  border: none;
+  background: none;
+  color: var(--color-primary);
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.stepper button:disabled {
+  color: var(--color-border);
+  cursor: not-allowed;
+}
+
+.stepper__value {
+  min-width: 28px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.gift-form__error {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-danger);
+}
+
+/* Full-width purple "Save gift" / "Save changes" button */
+.gift-form__submit {
+  padding: 13px 16px;
+  border: none;
+  border-radius: 10px;
+  background: var(--color-primary);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}

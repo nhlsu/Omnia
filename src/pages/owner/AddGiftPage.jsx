@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import {
+  addGift,
   fetchProductInfo,
   getCurrentUser,
   getRegistryWithGifts,
 } from "../../AppContext.jsx";
 import BackHeader from "../../components/owner/BackHeader.jsx";
+import GiftForm from "../../components/owner/GiftForm.jsx";
+import { AlertIcon, CheckIcon } from "../../components/owner/icons.jsx";
 import "./owner.css";
 import "./AddGiftPage.css";
 
@@ -18,8 +21,9 @@ function loadRegistry(registryId) {
   }
 }
 
-// W6 Add a gift by link (step 2 of 3). W7/W7b (the gift form) are added here next.
+// W6 Add a gift by link → W7 auto-filled form, or W7b manual form (step 2 of 3).
 function AddGiftPage() {
+  const navigate = useNavigate();
   const { registryId } = useParams();
   const registry = loadRegistry(registryId);
 
@@ -54,6 +58,22 @@ function AddGiftPage() {
     }, 1200);
   }
 
+  const storeDomain = product
+    ? new URL(product.productUrl).hostname.replace(/^www\./, "")
+    : "";
+
+  function handleSave(values) {
+    addGift({
+      registryId,
+      ...values,
+      storeName: product?.storeName ?? null,
+    });
+    navigate(`/my-wishlists/${registryId}`);
+  }
+
+  const isAutoForm = showForm && product;
+  const isManualForm = mode === "manual";
+
   return (
     <div className="owner-page">
       <BackHeader
@@ -69,28 +89,39 @@ function AddGiftPage() {
 
       <main className="owner-content">
         <h1 className="gift__title">Add a gift</h1>
-        <p className="gift__subtitle">Help them get it just right.</p>
 
-        <div className="tabs" role="tablist">
-          <button
-            type="button"
-            role="tab"
-            className={mode === "link" ? "tabs__tab tabs__tab--active" : "tabs__tab"}
-            onClick={() => setMode("link")}
-          >
-            Paste a link
-          </button>
-          <button
-            type="button"
-            role="tab"
-            className={
-              mode === "manual" ? "tabs__tab tabs__tab--active" : "tabs__tab"
-            }
-            onClick={() => setMode("manual")}
-          >
-            Enter manually
-          </button>
-        </div>
+        {!isAutoForm && (
+          <>
+            {mode === "link" && (
+              <p className="gift__subtitle">Help them get it just right.</p>
+            )}
+
+            <div className="tabs" role="tablist">
+              <button
+                type="button"
+                role="tab"
+                className={
+                  mode === "link" ? "tabs__tab tabs__tab--active" : "tabs__tab"
+                }
+                onClick={() => setMode("link")}
+              >
+                Paste a link
+              </button>
+              <button
+                type="button"
+                role="tab"
+                className={
+                  mode === "manual"
+                    ? "tabs__tab tabs__tab--active"
+                    : "tabs__tab"
+                }
+                onClick={() => setMode("manual")}
+              >
+                Enter manually
+              </button>
+            </div>
+          </>
+        )}
 
         {mode === "link" && !showForm && (
           <>
@@ -123,7 +154,9 @@ function AddGiftPage() {
               </div>
             )}
 
-            {product && <p className="gift__found">✓ Details found: {product.name}</p>}
+            {product && (
+              <p className="gift__found">✓ Details found: {product.name}</p>
+            )}
 
             <p className="gift__hint">
               Works with supported stores. You can always enter a gift manually.
@@ -140,16 +173,49 @@ function AddGiftPage() {
           </>
         )}
 
-        {/* W7 (auto-filled form) and W7b (manual form) are built tomorrow. */}
-        {(showForm || mode === "manual") && (
-          <>
-            {error && (
-              <p className="gift__error" role="alert">
-                {error}
-              </p>
-            )}
-            <p className="gift__hint">The gift form is coming next (W7 / W7b).</p>
-          </>
+        {/* W7: the fetched details, all editable */}
+        {isAutoForm && mode === "link" && (
+          <GiftForm
+            key="auto"
+            variant="auto"
+            initial={product}
+            onSubmit={handleSave}
+            banner={
+              <div className="gift-banner gift-banner--success" role="status">
+                <CheckIcon size={18} />
+                <p>
+                  Details filled in from {storeDomain}. Check them before
+                  saving.
+                </p>
+              </div>
+            }
+          />
+        )}
+
+        {/* W7b: manual entry. The yellow banner only shows if the fetch failed. */}
+        {isManualForm && (
+          <GiftForm
+            key="manual"
+            variant="manual"
+            initial={error ? { productUrl: url } : {}}
+            onSubmit={handleSave}
+            banner={
+              error ? (
+                <div className="gift-banner gift-banner--warning" role="status">
+                  <AlertIcon size={18} />
+                  <div>
+                    <p className="gift-banner__title">
+                      We can't auto-fill from this store yet
+                    </p>
+                    <p>
+                      Enter the details below. Your link is kept as the purchase
+                      link.
+                    </p>
+                  </div>
+                </div>
+              ) : null
+            }
+          />
         )}
       </main>
     </div>
