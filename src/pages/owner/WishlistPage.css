@@ -1,0 +1,208 @@
+/* "Settings ⚙" link in the top-right (W8 → W10) */
+.wishlist__settings {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-primary);
+}
+
+.wishlist__title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.wishlist__meta,
+.wishlist__empty {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* "A note from …" card: light purple */
+.wishlist-note {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--color-primary-soft);
+  font-size: 14px;
+  color: var(--color-text);
+}
+
+.wishlist-note__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+/* "5 of 12 gifts reserved   42%" and the bar under it */
+.wishlist-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.wishlist-progress__labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--color-text);
+}
+
+.wishlist-progress__percent {
+  color: var(--color-text-muted);
+}
+
+/* Shared progress bar: 6px light track, purple fill */
+.progress {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.progress__fill {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--color-primary);
+}
+
+/* Gift cards */
+.wishlist-gifts {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.gift-card {
+  display: flex;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+
+.gift-card__image {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  background: var(--owner-tint);
+  color: var(--color-primary);
+  overflow: hidden;
+}
+
+.gift-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gift-card__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.gift-card__name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.gift-card__price {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.gift-card__detail {
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.gift-card__pledged {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.gift-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.gift-card__edit {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+/* Status badges (W8 colours) */
+.badge {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge--available {
+  background: var(--owner-success-bg);
+  color: var(--color-success);
+}
+
+.badge--partly {
+  background: var(--owner-warning-bg);
+  color: var(--color-warning);
+}
+
+.badge--reserved {
+  background: var(--owner-tint);
+  color: var(--color-text-muted);
+}
+
+.badge--group {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+/* "+ Add gift" (outlined) and "Share" (purple), side by side */
+.wishlist-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.wishlist-actions__add,
+.wishlist-actions__share {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.wishlist-actions__add {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-primary);
+}
+
+.wishlist-actions__share {
+  background: var(--color-primary);
+  color: #ffffff;
+}
